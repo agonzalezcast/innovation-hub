@@ -37,6 +37,8 @@ _(se completa durante las semanas 2 a 4)_
 | 2 | 2026-09-08 | 444c056 | Agregar tabla del resumen de commits al README.md | README.md | Resumen de Commits |
 | 3 | 2026-09-08 | f07c442 | Maquetar el encabezado y la navegación del catálogo | Catálogo | Encabezado y Navegación |
 | 4 | 2026-09-08 | 2bc51db | Maquetar el titulo y los filtros del catalogo | Catálogo | Título y Filtros |
+| 5 | 2026-09-08 | 975d8ed | Agregar resultados y tarjetas de la busqueda | Catálogo | Busqueda y Tarjetas |
+
 
 
 
