@@ -35,5 +35,7 @@ _(se completa durante las semanas 2 a 4)_
 |---|------------|---------|-------------------------------------------------------|--------|---------------|
 | 1 | 2026-09-08 | 8ea66b8 | Crear estructura del avance 1 y documentacion inicial | Global | Carpetas      |
 | 2 | 2026-09-08 | 444c056 | Agregar tabla del resumen de commits al README.md | README.md | Resumen de Commits |
+| 3 | 2026-09-08 | f07c442 | Maquetar el encabezado y la navegación del catálogo | Catálogo | Encabezado y Navegación |
+
 
 
