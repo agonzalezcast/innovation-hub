@@ -31,4 +31,8 @@ _(se completa durante las semanas 2 a 4)_
  
 ## Resumen de commits
  
-_(ver la tabla al final de este archivo)_
+| # | Fecha      | Hash    |                         Mensaje                       | Zona   | Cambio        |
+|---|------------|---------|-------------------------------------------------------|--------|---------------|
+| 1 | 2026-09-08 | 8ea66b8 | Crear estructura del avance 1 y documentacion inicial | Global | Carpetas      |
+
+
