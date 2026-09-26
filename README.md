@@ -47,7 +47,7 @@ _(se completa durante las semanas 2 a 4)_
 | 6 | 2026-09-08 | 7269e42 | Completar la estructura semántica del catálogo | Catálogo | Rasultados, tarjetas y Footer |
 | 7 | 2026-09-23 | 5c1c3a1 | Creacion de archivos HTML para las paginas de detalle, perfil de usuario, registro y solicitud | Paginas | Creacion archivos HTML |
 | 8 | 2026-09-24 | 63b0176 | Actualizacion del README (integrantes) | README | Actualización de integrantes |
-
+| 9 | 2026-09-25 | de9df65 | Crear datos iniciales del proyecto (JSON) | Datos | Creacion de datos JSON de categorias, competencias e iniciativas |
 
 
 
