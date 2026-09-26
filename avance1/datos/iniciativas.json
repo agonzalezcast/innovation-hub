@@ -1,0 +1,202 @@
+[
+    {
+        "id": 1,
+        "titulo": "Plataforma de tutorías universitarias",
+        "tipo": "Idea",
+        "resumen": "Plataforma para conectar estudiantes que necesitan apoyo académico con estudiantes que pueden brindar tutorías.",
+        "descripcion": "Una plataforma universitaria para facilitar la búsqueda de tutorías entre estudiantes de diferentes carreras.",
+        "problema": "Los estudiantes tienen dificultades para encontrar compañeros que puedan brindarles apoyo en materias específicas.",
+        "beneficiarios": "Estudiantes universitarios",
+        "categoria": "Educación",
+        "competencias": [
+            "JavaScript",
+            "Comunicación",
+            "Trabajo en equipo"
+        ],
+        "participantes": 3,
+        "visibilidad": "Pública",
+        "propietario": "María Rodríguez",
+        "estado": "Publicada",
+        "etiquetas": [
+            "educación",
+            "tutorías",
+            "estudiantes"
+        ],
+        "miembros": []
+    },
+    {
+        "id": 2,
+        "titulo": "App de voluntariado estudiantil",
+        "tipo": "Idea",
+        "resumen": "Aplicación para conectar estudiantes con oportunidades de voluntariado dentro y fuera de la universidad.",
+        "descripcion": "Una aplicación que permite publicar y encontrar actividades de voluntariado en las que puedan participar estudiantes.",
+        "problema": "Los estudiantes no siempre conocen las oportunidades de voluntariado disponibles.",
+        "beneficiarios": "Estudiantes y organizaciones sociales",
+        "categoria": "Impacto Social",
+        "competencias": [
+            "Desarrollo Web",
+            "Diseño UX/UI",
+            "Comunicación"
+        ],
+        "participantes": 4,
+        "visibilidad": "Pública",
+        "propietario": "Carlos Méndez",
+        "estado": "Publicada",
+        "etiquetas": [
+            "voluntariado",
+            "comunidad",
+            "impacto social"
+        ],
+        "miembros": []
+    },
+    {
+        "id": 3,
+        "titulo": "Huerta inteligente universitaria",
+        "tipo": "Idea",
+        "resumen": "Sistema para monitorear las condiciones de una huerta universitaria mediante sensores.",
+        "descripcion": "Proyecto que combina sensores y software para controlar variables como humedad y temperatura en una huerta universitaria.",
+        "problema": "El mantenimiento de una huerta requiere supervisión constante de las condiciones del suelo y del ambiente.",
+        "beneficiarios": "Comunidad universitaria",
+        "categoria": "Sostenibilidad",
+        "competencias": [
+            "Internet de las Cosas",
+            "Programación",
+            "Electrónica"
+        ],
+        "participantes": 5,
+        "visibilidad": "Institucional",
+        "propietario": "Andrea Vargas",
+        "estado": "En desarrollo",
+        "etiquetas": [
+            "sostenibilidad",
+            "sensores",
+            "tecnología"
+        ],
+        "miembros": []
+    },
+    {
+        "id": 4,
+        "titulo": "Mejorar orientación de estudiantes nuevos",
+        "tipo": "Necesidad",
+        "resumen": "Se busca mejorar la orientación de los estudiantes durante sus primeras semanas en la universidad.",
+        "descripcion": "Propuesta para crear recursos digitales que ayuden a los estudiantes nuevos a conocer procesos, servicios y espacios universitarios.",
+        "problema": "Los estudiantes de nuevo ingreso pueden tener dificultades para encontrar información sobre procesos y servicios.",
+        "beneficiarios": "Estudiantes de nuevo ingreso",
+        "categoria": "Educación",
+        "competencias": [
+            "Comunicación",
+            "Diseño UX/UI",
+            "Investigación"
+        ],
+        "participantes": 2,
+        "visibilidad": "Pública",
+        "propietario": "Luis Hernández",
+        "estado": "Publicada",
+        "etiquetas": [
+            "orientación",
+            "estudiantes",
+            "universidad"
+        ],
+        "miembros": []
+    },
+    {
+        "id": 5,
+        "titulo": "Sistema para compartir equipo académico",
+        "tipo": "Necesidad",
+        "resumen": "Sistema para facilitar el préstamo y disponibilidad de equipo utilizado por estudiantes.",
+        "descripcion": "Una solución digital para consultar qué equipos están disponibles y facilitar su solicitud y préstamo.",
+        "problema": "Los estudiantes pueden desconocer qué equipos están disponibles y cómo solicitarlos.",
+        "beneficiarios": "Estudiantes y docentes",
+        "categoria": "Tecnología",
+        "competencias": [
+            "JavaScript",
+            "Bases de datos",
+            "Desarrollo Web"
+        ],
+        "participantes": 3,
+        "visibilidad": "Restringida",
+        "propietario": "Daniel Soto",
+        "estado": "En revisión",
+        "etiquetas": [
+            "equipos",
+            "préstamos",
+            "universidad"
+        ],
+        "miembros": []
+    },
+    {
+        "id": 6,
+        "titulo": "Reducir desperdicio de alimentos",
+        "tipo": "Reto",
+        "resumen": "Buscar alternativas para reducir la cantidad de alimentos que se desperdician dentro de la comunidad universitaria.",
+        "descripcion": "Reto para identificar las principales causas del desperdicio de alimentos y desarrollar propuestas que ayuden a reducirlo.",
+        "problema": "Parte de los alimentos disponibles en espacios universitarios puede terminar desperdiciándose.",
+        "beneficiarios": "Comunidad universitaria y medio ambiente",
+        "categoria": "Sostenibilidad",
+        "competencias": [
+            "Investigación",
+            "Análisis de datos",
+            "Sostenibilidad"
+        ],
+        "participantes": 4,
+        "visibilidad": "Pública",
+        "propietario": "Sofía Castro",
+        "estado": "Publicada",
+        "etiquetas": [
+            "alimentos",
+            "sostenibilidad",
+            "desperdicio"
+        ],
+        "miembros": []
+    },
+    {
+        "id": 7,
+        "titulo": "Mejorar movilidad dentro del campus",
+        "tipo": "Reto",
+        "resumen": "Identificar soluciones para mejorar la movilidad de estudiantes y visitantes dentro del campus.",
+        "descripcion": "Reto orientado a analizar los problemas de movilidad dentro del campus y proponer soluciones apoyadas en tecnología.",
+        "problema": "Algunas personas pueden tener dificultades para encontrar rutas y espacios dentro del campus.",
+        "beneficiarios": "Estudiantes, docentes y visitantes",
+        "categoria": "Tecnología",
+        "competencias": [
+            "Desarrollo Web",
+            "Diseño UX/UI",
+            "Análisis de datos"
+        ],
+        "participantes": 5,
+        "visibilidad": "Pública",
+        "propietario": "Jorge Ramírez",
+        "estado": "Publicada",
+        "etiquetas": [
+            "movilidad",
+            "campus",
+            "tecnología"
+        ],
+        "miembros": []
+    },
+    {
+        "id": 8,
+        "titulo": "Promover actividades culturales",
+        "tipo": "Reto",
+        "resumen": "Crear nuevas formas de promover y facilitar la participación en actividades culturales universitarias.",
+        "descripcion": "Reto para desarrollar propuestas que permitan dar mayor visibilidad a actividades culturales y facilitar la participación de la comunidad.",
+        "problema": "Los estudiantes pueden no enterarse oportunamente de las actividades culturales disponibles.",
+        "beneficiarios": "Comunidad universitaria",
+        "categoria": "Cultura y Creatividad",
+        "competencias": [
+            "Comunicación",
+            "Diseño UX/UI",
+            "Marketing"
+        ],
+        "participantes": 3,
+        "visibilidad": "Pública",
+        "propietario": "Valeria Gómez",
+        "estado": "En desarrollo",
+        "etiquetas": [
+            "cultura",
+            "arte",
+            "eventos"
+        ],
+        "miembros": []
+    }
+]

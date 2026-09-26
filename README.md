@@ -46,6 +46,7 @@ _(se completa durante las semanas 2 a 4)_
 | 5 | 2026-09-08 | 975d8ed | Agregar resultados y tarjetas de la busqueda | Catálogo | Busqueda y Tarjetas |
 | 6 | 2026-09-08 | 7269e42 | Completar la estructura semántica del catálogo | Catálogo | Rasultados, tarjetas y Footer |
 | 7 | 2026-09-23 | 5c1c3a1 | Creacion de archivos HTML para las paginas de detalle, perfil de usuario, registro y solicitud | Paginas | Creacion archivos HTML |
+| 8 | 2026-09-24 | 63b0176 | Actualizacion del README (integrantes) | README | Actualización de integrantes |
 
 
 
