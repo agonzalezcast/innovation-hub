@@ -12,22 +12,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 
     <link href="../css/main.css" rel="stylesheet">
-    
+
 </head>
 
 <body>
 
-    <header>
-        <a href="../index.html">Innovation Hub</a>
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg" data-bs-theme="dark" aria-label="Principal">
+            <div class="container">
+                <a class="navbar-brand" href="../index.html">Innovation Hub</a>
 
-        <nav aria-label="Principal">
-            <ul>
-                <li><a href="catalogo.html">Catálogo</a></li>
-                <li><a href="publicar-iniciativa.html">Publicar iniciativa</a></li>
-                <li><a href="proyectos.html">Proyectos</a></li>
-                <li><a href="perfil.html">Mi perfil</a></li>
-                <li><a href="solicitudes.html">Mis solicitudes</a></li>
-            </ul>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#menu-principal" aria-controls="menu-principal"
+                    aria-expanded="false" aria-label="Abrir menú de navegación">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="menu-principal">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="catalogo.html">Catálogo</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="publicar-iniciativa.html">Publicar iniciativa</a></li>
+                        <li class="nav-item"><a class="nav-link" href="perfil-usuario.html">Mi perfil</a></li>
+                    </ul>
+                </div>
+            </div>
         </nav>
     </header>
 
@@ -211,13 +220,18 @@
 
     </main>
 
-    <footer>
-        <p>Innovation Hub · Universidad CENFOTEC</p>
-        <p>
-            <a href="mailto:hub@ejemplo.ac.cr">
-                hub@ejemplo.ac.cr
-            </a>
-        </p>
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row gy-2">
+                <div class="col-md-6">
+                    <p class="fw-semibold mb-1">Innovation Hub</p>
+                    <p class="mb-0">Universidad CENFOTEC · SOFT-12</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">Contacto: <a href="mailto:hub@ejemplo.ac.cr">hub@ejemplo.ac.cr</a></p>
+                </div>
+            </div>
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
