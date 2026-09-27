@@ -1,0 +1,268 @@
+[
+    {
+        "id": 1,
+        "nombreCompleto": "Andrés Quesada Mora",
+        "tipoMiembro": "Estudiante",
+        "carrera": "Ingeniería del Software",
+        "descripcion": "Estudiante interesado en crear soluciones innovadoras que mejoren la vida universitaria.",
+        "competencias": [
+            {
+                "nombre": "JavaScript",
+                "nivel": "Intermedio"
+            },
+            {
+                "nombre": "Diseño UX/UI",
+                "nivel": "Básico"
+            },
+            {
+                "nombre": "Trabajo en equipo",
+                "nivel": "Avanzado"
+            }
+        ],
+        "intereses": [
+            "Educación",
+            "Tecnología",
+            "Sostenibilidad"
+        ],
+        "disponibilidad": "10 horas por semana",
+        "portafolio": "https://github.com/andres-quesada"
+    },
+    {
+        "id": 2,
+        "nombreCompleto": "María Rodríguez",
+        "tipoMiembro": "Estudiante",
+        "carrera": "Ingeniería del Software",
+        "descripcion": "Estudiante de últimos cuatrimestres con experiencia dando tutorías de programación.",
+        "competencias": [
+            {
+                "nombre": "JavaScript",
+                "nivel": "Avanzado"
+            },
+            {
+                "nombre": "Programación",
+                "nivel": "Intermedio"
+            },
+            {
+                "nombre": "Comunicación",
+                "nivel": "Intermedio"
+            }
+        ],
+        "intereses": [
+            "Educación",
+            "Tecnología"
+        ],
+        "disponibilidad": "8 horas por semana",
+        "portafolio": "https://github.com/maria-rodriguez"
+    },
+    {
+        "id": 3,
+        "nombreCompleto": "Carlos Méndez",
+        "tipoMiembro": "Estudiante",
+        "carrera": "Desarrollo Web",
+        "descripcion": "Desarrollador web interesado en proyectos de voluntariado y participación estudiantil.",
+        "competencias": [
+            {
+                "nombre": "Desarrollo Web",
+                "nivel": "Avanzado"
+            },
+            {
+                "nombre": "HTML",
+                "nivel": "Avanzado"
+            },
+            {
+                "nombre": "CSS",
+                "nivel": "Intermedio"
+            },
+            {
+                "nombre": "Comunicación",
+                "nivel": "Intermedio"
+            }
+        ],
+        "intereses": [
+            "Impacto Social",
+            "Tecnología"
+        ],
+        "disponibilidad": "6 horas por semana",
+        "portafolio": "https://carlosmendez.dev"
+    },
+    {
+        "id": 4,
+        "nombreCompleto": "Andrea Vargas",
+        "tipoMiembro": "Docente",
+        "carrera": "Ingeniería Ambiental",
+        "descripcion": "Docente e investigadora en agricultura urbana y sensores ambientales.",
+        "competencias": [
+            {
+                "nombre": "Electrónica",
+                "nivel": "Avanzado"
+            },
+            {
+                "nombre": "Internet de las Cosas",
+                "nivel": "Avanzado"
+            },
+            {
+                "nombre": "Sostenibilidad",
+                "nivel": "Avanzado"
+            },
+            {
+                "nombre": "Investigación",
+                "nivel": "Intermedio"
+            }
+        ],
+        "intereses": [
+            "Sostenibilidad",
+            "Tecnología"
+        ],
+        "disponibilidad": "4 horas por semana",
+        "portafolio": null
+    },
+    {
+        "id": 5,
+        "nombreCompleto": "Daniel Soto",
+        "tipoMiembro": "Estudiante",
+        "carrera": "Ingeniería del Software",
+        "descripcion": "Estudiante enfocado en aplicaciones web con bases de datos.",
+        "competencias": [
+            {
+                "nombre": "Bases de datos",
+                "nivel": "Avanzado"
+            },
+            {
+                "nombre": "Desarrollo Web",
+                "nivel": "Intermedio"
+            },
+            {
+                "nombre": "Java",
+                "nivel": "Intermedio"
+            }
+        ],
+        "intereses": [
+            "Tecnología"
+        ],
+        "disponibilidad": "10 horas por semana",
+        "portafolio": "https://github.com/daniel-soto"
+    },
+    {
+        "id": 6,
+        "nombreCompleto": "Sofía Castro",
+        "tipoMiembro": "Administrativo",
+        "carrera": "Administración de Empresas",
+        "descripcion": "Coordina los servicios de alimentación del campus y los programas de reducción de residuos.",
+        "competencias": [
+            {
+                "nombre": "Investigación",
+                "nivel": "Avanzado"
+            },
+            {
+                "nombre": "Análisis de datos",
+                "nivel": "Intermedio"
+            },
+            {
+                "nombre": "Sostenibilidad",
+                "nivel": "Intermedio"
+            }
+        ],
+        "intereses": [
+            "Sostenibilidad",
+            "Impacto Social"
+        ],
+        "disponibilidad": "5 horas por semana",
+        "portafolio": null
+    },
+    {
+        "id": 7,
+        "nombreCompleto": "Jorge Ramírez",
+        "tipoMiembro": "Estudiante",
+        "carrera": "Ingeniería del Software",
+        "descripcion": "Estudiante interesado en movilidad y visualización de datos.",
+        "competencias": [
+            {
+                "nombre": "Desarrollo Web",
+                "nivel": "Avanzado"
+            },
+            {
+                "nombre": "Análisis de datos",
+                "nivel": "Intermedio"
+            },
+            {
+                "nombre": "Bases de datos",
+                "nivel": "Intermedio"
+            }
+        ],
+        "intereses": [
+            "Tecnología",
+            "Sostenibilidad"
+        ],
+        "disponibilidad": "12 horas por semana",
+        "portafolio": "https://github.com/jorge-ramirez"
+    },
+    {
+        "id": 8,
+        "nombreCompleto": "Paula Jiménez",
+        "tipoMiembro": "Estudiante",
+        "carrera": "Diseño Digital",
+        "descripcion": "Diseñadora de interfaces con interés en proyectos sociales.",
+        "competencias": [
+            {
+                "nombre": "Diseño UX/UI",
+                "nivel": "Avanzado"
+            },
+            {
+                "nombre": "Comunicación",
+                "nivel": "Intermedio"
+            }
+        ],
+        "intereses": [
+            "Impacto Social",
+            "Cultura y Creatividad"
+        ],
+        "disponibilidad": "6 horas por semana",
+        "portafolio": "https://behance.net/paula-jimenez"
+    },
+    {
+        "id": 9,
+        "nombreCompleto": "Natalia Brenes",
+        "tipoMiembro": "Estudiante",
+        "carrera": "Diseño Digital",
+        "descripcion": "Estudiante de diseño que disfruta crear experiencias sencillas y accesibles.",
+        "competencias": [
+            {
+                "nombre": "Diseño UX/UI",
+                "nivel": "Intermedio"
+            },
+            {
+                "nombre": "Marketing",
+                "nivel": "Básico"
+            }
+        ],
+        "intereses": [
+            "Cultura y Creatividad",
+            "Tecnología"
+        ],
+        "disponibilidad": "8 horas por semana",
+        "portafolio": null
+    },
+    {
+        "id": 10,
+        "nombreCompleto": "Esteban Rojas",
+        "tipoMiembro": "Estudiante",
+        "carrera": "Ciencia de Datos",
+        "descripcion": "Estudiante de ciencia de datos con experiencia en análisis de rutas y horarios.",
+        "competencias": [
+            {
+                "nombre": "Análisis de datos",
+                "nivel": "Avanzado"
+            },
+            {
+                "nombre": "Programación",
+                "nivel": "Intermedio"
+            }
+        ],
+        "intereses": [
+            "Tecnología",
+            "Sostenibilidad"
+        ],
+        "disponibilidad": "8 horas por semana",
+        "portafolio": "https://github.com/esteban-rojas"
+    }
+]

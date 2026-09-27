@@ -254,7 +254,7 @@ function crearIniciativa() {
         ),
         visibilidad: document.querySelector("#visibilidad").value,
         propietario: "Usuario actual",
-        estado: "Abierta",
+        estado: "Publicada",
         etiquetas: etiquetas,
         miembros: []
     };
