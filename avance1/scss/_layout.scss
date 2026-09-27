@@ -1,0 +1,48 @@
+// Foco visible en toda la interfaz 
+:focus-visible {
+    outline: 3px solid $warning;
+    outline-offset: 2px;
+}
+
+// Encabezado
+.site-header {
+    background-color: $primary;
+
+    .navbar-brand {
+        font-family: $headings-font-family;
+        font-weight: 700;
+    }
+}
+
+// Portada de la pagina principal
+.hero {
+    background: linear-gradient(135deg, $primary, shade-color($primary, 30%));
+    color: $white;
+    padding-block: $spacer * 3;
+
+    // Usar para mobile first.
+    @include media-breakpoint-up(lg) {
+        padding-block: $spacer * 5;
+    }
+}
+
+// Secciones de contenido
+.seccion {
+    padding-block: $spacer * 2;
+
+    @include media-breakpoint-up(md) {
+        padding-block: $spacer * 3;
+    }
+}
+
+// Footer 
+.site-footer {
+    background-color: $texto;
+    color: tint-color($texto, 80%);
+    padding-block: $spacer * 2;
+    margin-top: $spacer * 3;
+
+    a {
+        color: $warning;
+    }
+}

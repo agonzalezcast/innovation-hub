@@ -1,0 +1,42 @@
+
+// Tarjeta de iniciativa del catálogo
+.tarjeta-iniciativa {
+    @include tarjeta-levantada;
+    border: 0;
+    border-top: 4px solid $primary;
+
+    .card-title {
+        color: $primary;
+    }
+}
+
+// Insignias por tipo de iniciativa (el texto siempre acompaña al color)
+.badge-tipo {
+    // BEM...
+    &--idea {
+        background-color: $primary;
+    }
+
+    &--necesidad {
+        background-color: $warning;
+        color: $texto;
+    }
+
+    &--reto {
+        background-color: $secondary;
+    }
+}
+
+// Insignia de visibilidad: contorno, para distinguirla del tipo
+.badge-visibilidad {
+    background-color: transparent;
+    border: 1px solid currentColor;
+    color: $texto;
+}
+
+// Mensajes de error de los formularios
+.mensaje-error {
+    color: $form-feedback-invalid-color;
+    font-size: $form-feedback-font-size;
+    min-height: 1.25em;
+}
