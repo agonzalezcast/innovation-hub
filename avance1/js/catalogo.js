@@ -17,6 +17,10 @@ async function cargarIniciativas() {
 
         iniciativas = await respuesta.json();
 
+        const iniciativasGuardadas = JSON.parse(localStorage.getItem("iniciativas")) || [];
+
+        iniciativas = iniciativas.concat(iniciativasGuardadas);
+
         mostrarIniciativas(iniciativas);
 
     } catch (error) {

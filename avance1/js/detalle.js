@@ -17,7 +17,11 @@ async function cargarDetalle() {
             throw new Error("No se pudieron cargar las iniciativas");
         }
 
-        const iniciativas = await respuesta.json();
+        let iniciativas = await respuesta.json();
+
+        const iniciativasGuardadas = JSON.parse(localStorage.getItem("iniciativas")) || [];
+
+        iniciativas = iniciativas.concat(iniciativasGuardadas);
 
         const iniciativa = iniciativas.find(
             iniciativa => iniciativa.id === id
@@ -132,8 +136,8 @@ function mostrarDetalleCompleto(iniciativa) {
 
                 <ul>
                     ${iniciativa.competencias
-                    .map(competencia => `<li>${competencia}</li>`)
-                    .join("")}
+            .map(competencia => `<li>${competencia}</li>`)
+            .join("")}
                 </ul>
             </section>
 
@@ -142,10 +146,10 @@ function mostrarDetalleCompleto(iniciativa) {
 
                 <p>
                     ${iniciativa.etiquetas
-                    .map(etiqueta =>
-                    `<span class="badge text-bg-light me-1">${etiqueta}</span>`
-                    )
-                    .join("")}
+            .map(etiqueta =>
+                `<span class="badge text-bg-light me-1">${etiqueta}</span>`
+            )
+            .join("")}
                 </p>
             </section>
 
@@ -183,8 +187,8 @@ function mostrarDetalleRestringido(iniciativa) {
 
                 <ul>
                     ${iniciativa.competencias
-                    .map(competencia => `<li>${competencia}</li>`)
-                    .join("")}
+            .map(competencia => `<li>${competencia}</li>`)
+            .join("")}
                 </ul>
             </section>
 

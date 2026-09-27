@@ -50,6 +50,7 @@ _(se completa durante las semanas 2 a 4)_
 | 9 | 2026-09-25 | de9df65 | Crear datos iniciales del proyecto (JSON) | Datos | Creacion de datos JSON de categorias, competencias e iniciativas |
 | 10 | 2026-09-26 | 6da24ff | Implementar carga asincronica de iniciativas | Catalogo | Implementar carga asincronica de iniciativas |
 | 11 | 2026-09-26 | 4d7ebe6 | Implementar catalogo dinamico con busqueda y filtros | Catalogo | Catalogo dinamico con busqueda/filtros y estructura con bootstrap |
+| 12 | 2026-09-27 | e7e8366 | Implementar detalle y visibilidad de iniciativas | Detalle | Estructura HTML y logica del detalle de una iniciativa |
 
 
 
