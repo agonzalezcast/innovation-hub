@@ -11,14 +11,17 @@ async function cargarDetalle() {
         const parametros = new URLSearchParams(window.location.search);
         const id = Number(parametros.get("id"));
 
-        const iniciativa = await obtenerIniciativaPorId(id);
+        const [iniciativa, usuario] = await Promise.all([
+            obtenerIniciativaPorId(id),
+            obtenerUsuarioActual()
+        ]);
 
         if (!iniciativa) {
             mostrarIniciativaNoEncontrada();
             return;
         }
 
-        mostrarDetalle(iniciativa);
+        mostrarDetalle(iniciativa, usuario);
 
     } catch (error) {
         console.error(error);
@@ -41,7 +44,7 @@ function mostrarIniciativaNoEncontrada() {
     `;
 }
 
-function mostrarDetalle(iniciativa) {
+function mostrarDetalle(iniciativa, usuario) {
     if (iniciativa.visibilidad === "Restringida") {
         mostrarDetalleRestringido(iniciativa);
         return;
@@ -52,11 +55,26 @@ function mostrarDetalle(iniciativa) {
         return;
     }
 
-    mostrarDetalleCompleto(iniciativa);
+    mostrarDetalleCompleto(iniciativa, usuario);
 }
 
-function mostrarDetalleCompleto(iniciativa) {
+function mostrarDetalleCompleto(iniciativa, usuario) {
     const contenedor = document.querySelector("#detalle-iniciativa");
+
+    const esPropietario = iniciativa.idPropietario === usuario.id;
+
+    // RN-06 y RN-10: el propietario edita; los demás solicitan participar
+    let accion = `
+        <a href="solicitud-participacion.html?id=${iniciativa.id}" class="btn btn-primary">
+            Solicitar participación
+        </a>
+    `;
+
+    if (esPropietario) {
+        accion = iniciativa.estado === "Archivada"
+            ? `<p class="alert alert-secondary">Esta iniciativa está archivada y ya no se puede modificar.</p>`
+            : `<a href="publicar-iniciativa.html?editar=${iniciativa.id}" class="btn btn-primary">Editar iniciativa</a>`;
+    }
 
     contenedor.innerHTML = `
         <article>
@@ -139,11 +157,7 @@ function mostrarDetalleCompleto(iniciativa) {
                 </p>
             </section>
 
-            <a
-                href="solicitud-participacion.html?id=${iniciativa.id}"
-                class="btn btn-primary">
-                Solicitar participación
-            </a>
+            ${accion}
         </article>
     `;
 }

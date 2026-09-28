@@ -2,9 +2,12 @@ const listaCompetencias = document.querySelector("#lista-competencias");
 const formIniciativa = document.querySelector("#form-iniciativa");
 const btnAgregarCompetencia = document.querySelector("#btn-agregar-competencia");
 
-btnAgregarCompetencia.addEventListener("click", agregarCompetencia);
+btnAgregarCompetencia.addEventListener("click", () => agregarCompetencia());
 
-function agregarCompetencia() {
+const idEditar = Number(new URLSearchParams(window.location.search).get("editar"));
+let iniciativaEditada = null;
+
+function agregarCompetencia(valor = "") {
     const contenedor = document.createElement("div");
 
     contenedor.className = "input-group mb-2";
@@ -38,6 +41,8 @@ function agregarCompetencia() {
             Eliminar
         </button>
     `;
+
+    contenedor.querySelector(".competencia").value = valor;
 
     listaCompetencias.appendChild(contenedor);
 
@@ -275,6 +280,57 @@ function crearIniciativa(usuario, id) {
     return iniciativa;
 }
 
+async function cargarEdicion() {
+    if (!idEditar) {
+        agregarCompetencia();
+        return;
+    }
+
+    try {
+        const [iniciativa, usuario] = await Promise.all([
+            obtenerIniciativaPorId(idEditar),
+            obtenerUsuarioActual()
+        ]);
+
+        // RN-06: solo el propietario modifica, y una archivada ya no se modifica
+        if (!iniciativa || iniciativa.idPropietario !== usuario.id || iniciativa.estado === "Archivada") {
+            formIniciativa.classList.add("d-none");
+            formIniciativa.insertAdjacentHTML("beforebegin", `
+                <div class="alert alert-warning" role="alert">
+                    No tiene permiso para modificar esta iniciativa.
+                </div>
+                <a href="catalogo.html" class="btn btn-outline-primary">Volver al catálogo</a>
+            `);
+            return;
+        }
+
+        iniciativaEditada = iniciativa;
+        precargarFormulario(iniciativa);
+
+    } catch (error) {
+        console.error(error);
+        alert("No se pudo cargar la iniciativa.");
+    }
+}
+
+function precargarFormulario(iniciativa) {
+    document.title = "Modificar iniciativa — Innovation Hub";
+    document.querySelector("#titulo-pagina").textContent = "Modificar iniciativa";
+    document.querySelector("#descripcion-pagina").textContent = "Actualice la información de su iniciativa.";
+    document.querySelector("#btn-guardar").textContent = "Guardar cambios";
+
+    const campos = ["titulo", "tipo", "resumen", "descripcion", "problema",
+        "beneficiarios", "categoria", "participantes", "visibilidad"];
+
+    campos.forEach(campo => {
+        document.querySelector(`#${campo}`).value = iniciativa[campo] ?? "";
+    });
+
+    document.querySelector("#etiquetas").value = iniciativa.etiquetas.join(", ");
+
+    iniciativa.competencias.forEach(competencia => agregarCompetencia(competencia));
+}
+
 formIniciativa.addEventListener("submit", async function (evento) {
     evento.preventDefault();
 
@@ -286,6 +342,29 @@ formIniciativa.addEventListener("submit", async function (evento) {
 
     try {
         const usuario = await obtenerUsuarioActual();
+
+        if (iniciativaEditada) {
+            const cantidadMiembros = iniciativaEditada.miembros.length;
+
+            // RF-I-INI-03: no puede quedar por debajo de los miembros ya aceptados
+            if (Number(document.querySelector("#participantes").value) < cantidadMiembros) {
+                mostrarError("#error-participantes",
+                    `Debe ser al menos ${cantidadMiembros}, la cantidad de miembros actuales.`);
+                return;
+            }
+
+            // Se conservan id, estado, fechas originales y miembros
+            actualizarIniciativa({
+                ...crearIniciativa(usuario, iniciativaEditada.id),
+                estado: iniciativaEditada.estado,
+                fechaCreacion: iniciativaEditada.fechaCreacion,
+                fechaPublicacion: iniciativaEditada.fechaPublicacion,
+                miembros: iniciativaEditada.miembros
+            });
+
+            window.location.href = `detalle.html?id=${iniciativaEditada.id}`;
+            return;
+        }
         const id = await obtenerSiguienteId();
         const iniciativa = crearIniciativa(usuario, id);
 
@@ -298,4 +377,4 @@ formIniciativa.addEventListener("submit", async function (evento) {
     }
 });
 
-agregarCompetencia();
+cargarEdicion();
