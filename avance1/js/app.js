@@ -125,3 +125,8 @@ function tieneInformacionRelacionada(iniciativa) {
 
     return otrosMiembros || conSolicitudes;
 }
+
+// Punto de doc 5 iniciativa: espacios = integrantes estimados menos los miembros actuales
+function calcularEspaciosDisponibles(iniciativa) {
+    return Math.max(0, iniciativa.participantes - (iniciativa.miembros || []).length);
+}
