@@ -13,10 +13,21 @@ async function cargarIniciativas() {
         `;
 
     try {
-        [iniciativas, usuarioActual] = await Promise.all([
+        let categorias;
+        let competencias;
+
+        [iniciativas, usuarioActual, categorias, competencias] = await Promise.all([
             obtenerIniciativas(),
-            obtenerUsuarioActual()
+            obtenerUsuarioActual(),
+            obtenerCategorias(),
+            obtenerCompetencias()
         ]);
+
+        document.querySelector("#filtro-categoria")
+            .insertAdjacentHTML("beforeend", crearOpciones(categorias));
+
+        document.querySelector("#filtro-competencia")
+            .insertAdjacentHTML("beforeend", crearOpciones(competencias));
 
         // Punto 20: las privadas no se muestran en el catálogo publico.
         iniciativas = iniciativas.filter(iniciativa => iniciativa.visibilidad !== "Privada");
@@ -40,7 +51,7 @@ function mostrarIniciativas(listaIniciativas) {
 
     contenedor.innerHTML = "";
 
-    if (listaIniciativas.length === 0) {
+    if (listaIniciativas.length === 1) {
         tituloResultados.textContent = "1 iniciativa encontrada";
     } else {
         tituloResultados.textContent =
@@ -193,12 +204,11 @@ formFiltros.addEventListener("submit", function (evento) {
 const btnLimpiar = document.querySelector("#btn-limpiar");
 
 btnLimpiar.addEventListener("click", function () {
+    // El buscador está fuera del formulario, por eso se limpia aparte
+    formFiltros.reset();
     buscador.value = "";
-    document.querySelector("#filtro-tipo").value = "";
-    document.querySelector("#filtro-categoria").value = "";
-    document.querySelector("#filtro-competencia").value = "";
 
-    mostrarIniciativas(iniciativas);
+    aplicarFiltros();
 });
 
 function abrirConfirmacion(iniciativa) {

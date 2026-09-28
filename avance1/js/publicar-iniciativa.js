@@ -6,6 +6,7 @@ btnAgregarCompetencia.addEventListener("click", () => agregarCompetencia());
 
 const idEditar = Number(new URLSearchParams(window.location.search).get("editar"));
 let iniciativaEditada = null;
+let competenciasDisponibles = [];
 
 function agregarCompetencia(valor = "") {
     const contenedor = document.createElement("div");
@@ -15,24 +16,7 @@ function agregarCompetencia(valor = "") {
     contenedor.innerHTML = `
         <select class="form-select competencia">
             <option value="">Seleccione una competencia</option>
-            <option value="Java">Java</option>
-            <option value="JavaScript">JavaScript</option>
-            <option value="HTML">HTML</option>
-            <option value="CSS">CSS</option>
-            <option value="Desarrollo Web">Desarrollo Web</option>
-            <option value="Bases de datos">Bases de datos</option>
-            <option value="Programación">Programación</option>
-            <option value="Diseño UX/UI">Diseño UX/UI</option>
-            <option value="Comunicación">Comunicación</option>
-            <option value="Trabajo en equipo">Trabajo en equipo</option>
-            <option value="Investigación">Investigación</option>
-            <option value="Análisis de datos">Análisis de datos</option>
-            <option value="Marketing">Marketing</option>
-            <option value="Electrónica">Electrónica</option>
-            <option value="Internet de las Cosas">
-                Internet de las Cosas
-            </option>
-            <option value="Sostenibilidad">Sostenibilidad</option>
+            ${crearOpciones(competenciasDisponibles)}
         </select>
 
         <button
@@ -46,21 +30,30 @@ function agregarCompetencia(valor = "") {
 
     listaCompetencias.appendChild(contenedor);
 
-    const btnEliminar = contenedor.querySelector(".btn-eliminar-competencia");
+    numerarCompetencias();
+}
 
-    btnEliminar.addEventListener("click", function () {
-        contenedor.remove();
+// Cada select dinámico necesita un nombre accesible propio
+function numerarCompetencias() {
+    listaCompetencias.querySelectorAll(".input-group").forEach((grupo, indice) => {
+        grupo.querySelector(".competencia")
+            .setAttribute("aria-label", `Competencia ${indice + 1}`);
+
+        grupo.querySelector(".btn-eliminar-competencia")
+            .setAttribute("aria-label", `Eliminar competencia ${indice + 1}`);
     });
 }
 
-formIniciativa.addEventListener("submit", function (evento) {
-    evento.preventDefault();
+// Un solo listener para todos los botones Eliminar, incluso los que se agregan después
+listaCompetencias.addEventListener("click", function (evento) {
+    const btnEliminar = evento.target.closest(".btn-eliminar-competencia");
 
-    const formularioValido = validarFormulario();
-
-    if (formularioValido) {
-        console.log("Formulario válido");
+    if (!btnEliminar) {
+        return;
     }
+
+    btnEliminar.closest(".input-group").remove();
+    numerarCompetencias();
 });
 
 function mostrarError(id, mensaje) {
@@ -377,4 +370,42 @@ formIniciativa.addEventListener("submit", async function (evento) {
     }
 });
 
-cargarEdicion();
+// Las opciones se cargan antes de precargar una edición, para que los valores existan en los select
+async function cargarFormulario() {
+    const btnGuardar = document.querySelector("#btn-guardar");
+    const estadoCarga = document.createElement("div");
+
+    estadoCarga.className = "alert alert-secondary";
+    estadoCarga.setAttribute("role", "status");
+    estadoCarga.textContent = "Cargando opciones del formulario...";
+
+    formIniciativa.before(estadoCarga);
+    btnGuardar.disabled = true;
+
+    try {
+        const [categorias, competencias] = await Promise.all([
+            obtenerCategorias(),
+            obtenerCompetencias()
+        ]);
+
+        competenciasDisponibles = competencias;
+
+        document.querySelector("#categoria")
+            .insertAdjacentHTML("beforeend", crearOpciones(categorias));
+
+        estadoCarga.remove();
+        btnGuardar.disabled = false;
+
+        await cargarEdicion();
+
+    } catch (error) {
+        console.error(error);
+
+        formIniciativa.classList.add("d-none");
+        estadoCarga.className = "alert alert-danger";
+        estadoCarga.setAttribute("role", "alert");
+        estadoCarga.textContent = "No se pudieron cargar las categorías y competencias. Intente de nuevo más tarde.";
+    }
+}
+
+cargarFormulario();
