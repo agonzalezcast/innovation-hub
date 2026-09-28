@@ -125,3 +125,23 @@ function tieneInformacionRelacionada(iniciativa) {
 
     return otrosMiembros || conSolicitudes;
 }
+
+// Punto de doc 5 iniciativa: espacios = integrantes estimados menos los miembros actuales
+function calcularEspaciosDisponibles(iniciativa) {
+    return Math.max(0, iniciativa.participantes - (iniciativa.miembros || []).length);
+}
+
+// Las opciones de categorías y competencias se generan desde los archivos JSON
+async function obtenerCategorias() {
+    return cargarJSON("categorias.json");
+}
+
+async function obtenerCompetencias() {
+    return cargarJSON("competencias.json");
+}
+
+function crearOpciones(lista) {
+    return lista
+        .map(valor => `<option value="${valor}">${valor}</option>`)
+        .join("");
+}
