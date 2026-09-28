@@ -216,7 +216,7 @@ function validarFormulario() {
     return formularioValido;
 }
 
-function crearIniciativa() {
+function crearIniciativa(usuario, id) {
     const competencias = [];
 
     document.querySelectorAll(".competencia").forEach(select => {
@@ -240,7 +240,7 @@ function crearIniciativa() {
     }
 
     const iniciativa = {
-        id: Date.now(),
+        id: id,
         titulo: document.querySelector("#titulo").value.trim(),
         tipo: document.querySelector("#tipo").value,
         resumen: document.querySelector("#resumen").value.trim(),
@@ -253,28 +253,29 @@ function crearIniciativa() {
             document.querySelector("#participantes").value
         ),
         visibilidad: document.querySelector("#visibilidad").value,
-        propietario: "Usuario actual",
+        propietario: usuario.nombreCompleto,
+        idPropietario: usuario.id,
         estado: "Publicada",
         etiquetas: etiquetas,
-        miembros: []
+        fechaCreacion: fechaActual(),
+        fechaPublicacion: fechaActual(),
+        fechaModificacion: fechaActual(),
+        miembros: [
+            {
+                idUsuario: usuario.id,
+                nombre: usuario.nombreCompleto,
+                carrera: usuario.carrera,
+                competencias: [],
+                rol: "Propietario",
+                fechaIncorporacion: fechaActual()
+            }
+        ]
     };
 
     return iniciativa;
 }
 
-function guardarIniciativa(iniciativa) {
-    const iniciativasGuardadas =
-        JSON.parse(localStorage.getItem("iniciativas")) || [];
-
-    iniciativasGuardadas.push(iniciativa);
-
-    localStorage.setItem(
-        "iniciativas",
-        JSON.stringify(iniciativasGuardadas)
-    );
-}
-
-formIniciativa.addEventListener("submit", function (evento) {
+formIniciativa.addEventListener("submit", async function (evento) {
     evento.preventDefault();
 
     const formularioValido = validarFormulario();
@@ -283,11 +284,18 @@ formIniciativa.addEventListener("submit", function (evento) {
         return;
     }
 
-    const iniciativa = crearIniciativa();
+    try {
+        const usuario = await obtenerUsuarioActual();
+        const id = await obtenerSiguienteId();
+        const iniciativa = crearIniciativa(usuario, id);
 
-    guardarIniciativa(iniciativa);
+        guardarIniciativa(iniciativa);
 
-    window.location.href = "catalogo.html";
+        window.location.href = "catalogo.html";
+    } catch (error) {
+        console.error(error);
+        alert("No se pudo publicar la iniciativa. Intente de nuevo.");
+    }
 });
 
 agregarCompetencia();
