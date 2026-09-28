@@ -140,7 +140,7 @@ function mostrarDetalleCompleto(iniciativa) {
             </section>
 
             <a
-                href="solicitud.html?id=${iniciativa.id}"
+                href="solicitud-participacion.html?id=${iniciativa.id}"
                 class="btn btn-primary">
                 Solicitar participación
             </a>
