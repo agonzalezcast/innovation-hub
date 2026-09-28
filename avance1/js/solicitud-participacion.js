@@ -45,6 +45,11 @@ async function cargarSolicitud() {
             return;
         }
 
+        if (iniciativa.estado === "Archivada") {
+            mostrarAviso("warning", "Esta iniciativa está archivada y ya no recibe solicitudes.");
+            return;
+        }
+
         if (iniciativa.visibilidad === "Privada") {
             mostrarAviso("warning", "Esta iniciativa es privada y no admite solicitudes.");
             return;
@@ -97,23 +102,60 @@ function mostrarFormulario(iniciativa, usuario) {
     formulario.classList.remove("d-none");
 }
 
-function validarCampo(campo, valido) {
-    campo.classList.toggle("is-invalid", !valido);
-    return valido;
+function validarTexto(valor, minimo, maximo, campo, obligatorio) {
+    if (valor === "") {
+        return obligatorio;
+    }
+
+    if (valor.length < minimo || valor.length > maximo) {
+        return `${campo} debe tener entre ${minimo} y ${maximo} caracteres; ahora tiene ${valor.length}.`;
+    }
+
+    return "";
+}
+
+// Reglas por campo: cada una recibe el valor y devuelve el mensaje de error, o "" si es válido
+const reglas = {
+    mensaje: valor => validarTexto(valor, 30, 500, "El mensaje",
+        "El mensaje de presentación es obligatorio."),
+
+    competencia: valor => iniciativaActual.competencias.includes(valor)
+        ? ""
+        : "Seleccione una de las competencias requeridas.",
+
+    rol: valor => validarTexto(valor, 3, 60, "El rol",
+        "Indique el rol que desea."),
+
+    disponibilidad: valor => validarTexto(valor, 3, 60, "La disponibilidad",
+        "Indique su disponibilidad.")
+};
+
+function validarCampo(nombre) {
+    const campo = formulario[nombre];
+    const mensaje = reglas[nombre](campo.value.trim());
+    const invalido = mensaje !== "";
+
+    document.querySelector(`#error-${nombre}`).textContent = mensaje;
+    campo.classList.toggle("is-invalid", invalido);
+    campo.setAttribute("aria-invalid", invalido);
+
+    return !invalido;
 }
 
 function validarFormulario() {
-    const mensaje = formulario.mensaje.value.trim();
-
-    const resultados = [
-        validarCampo(formulario.mensaje, mensaje.length >= 30 && mensaje.length <= 500),
-        validarCampo(formulario.competencia, iniciativaActual.competencias.includes(formulario.competencia.value)),
-        validarCampo(formulario.rol, formulario.rol.value.trim() !== ""),
-        validarCampo(formulario.disponibilidad, formulario.disponibilidad.value.trim() !== "")
-    ];
+    const resultados = Object.keys(reglas).map(validarCampo);
 
     return resultados.every(resultado => resultado);
 }
+
+// Después del primer intento, cada campo marcado se vuelve a validar mientras el usuario lo corrige
+formulario.addEventListener("input", evento => {
+    const campo = evento.target;
+
+    if (campo.classList.contains("is-invalid") && reglas[campo.name]) {
+        validarCampo(campo.name);
+    }
+});
 
 formulario.addEventListener("submit", evento => {
     evento.preventDefault();

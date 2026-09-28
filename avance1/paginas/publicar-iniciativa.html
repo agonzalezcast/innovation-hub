@@ -56,7 +56,9 @@
                     Título
                 </label>
 
-                <input type="text" id="titulo" name="titulo" class="form-control">
+                <input type="text" id="titulo" name="titulo" class="form-control" aria-describedby="ayuda-titulo error-titulo">
+
+                <div id="ayuda-titulo" class="form-text">Entre 5 y 80 caracteres. No puede repetir el título de otra iniciativa.</div>
 
                 <div id="error-titulo" class="text-danger"></div>
             </div>
@@ -67,7 +69,7 @@
                     Tipo
                 </label>
 
-                <select id="tipo" name="tipo" class="form-select">
+                <select id="tipo" name="tipo" class="form-select" aria-describedby="error-tipo">
                     <option value="">Seleccione un tipo</option>
                     <option value="Idea">Idea</option>
                     <option value="Necesidad">Necesidad</option>
@@ -83,7 +85,9 @@
                     Resumen
                 </label>
 
-                <textarea id="resumen" name="resumen" class="form-control" rows="3"></textarea>
+                <textarea id="resumen" name="resumen" class="form-control" rows="3" aria-describedby="ayuda-resumen error-resumen"></textarea>
+
+                <div id="ayuda-resumen" class="form-text">Entre 20 y 200 caracteres. Se muestra en la tarjeta del catálogo.</div>
 
                 <div id="error-resumen" class="text-danger"></div>
             </div>
@@ -94,7 +98,9 @@
                     Descripción
                 </label>
 
-                <textarea id="descripcion" name="descripcion" class="form-control" rows="5"></textarea>
+                <textarea id="descripcion" name="descripcion" class="form-control" rows="5" aria-describedby="ayuda-descripcion error-descripcion"></textarea>
+
+                <div id="ayuda-descripcion" class="form-text">Entre 30 y 1000 caracteres.</div>
 
                 <div id="error-descripcion" class="text-danger"></div>
             </div>
@@ -102,10 +108,12 @@
 
             <div class="mb-3">
                 <label for="problema" class="form-label">
-                    Problema o necesidad
+                    Problema o necesidad (opcional)
                 </label>
 
-                <textarea id="problema" name="problema" class="form-control" rows="3"></textarea>
+                <textarea id="problema" name="problema" class="form-control" rows="3" aria-describedby="ayuda-problema error-problema"></textarea>
+
+                <div id="ayuda-problema" class="form-text">Opcional. Si lo completa, entre 10 y 500 caracteres.</div>
 
                 <div id="error-problema" class="text-danger"></div>
             </div>
@@ -113,10 +121,12 @@
 
             <div class="mb-3">
                 <label for="beneficiarios" class="form-label">
-                    Beneficiarios
+                    Beneficiarios (opcional)
                 </label>
 
-                <input type="text" id="beneficiarios" name="beneficiarios" class="form-control">
+                <input type="text" id="beneficiarios" name="beneficiarios" class="form-control" aria-describedby="ayuda-beneficiarios error-beneficiarios">
+
+                <div id="ayuda-beneficiarios" class="form-text">Opcional. Si lo completa, entre 10 y 150 caracteres.</div>
 
                 <div id="error-beneficiarios" class="text-danger"></div>
             </div>
@@ -127,7 +137,7 @@
                     Categoría
                 </label>
 
-                <select id="categoria" name="categoria" class="form-select">
+                <select id="categoria" name="categoria" class="form-select" aria-describedby="error-categoria">
 
                     <option value="">Seleccione una categoría</option>
                 </select>
@@ -141,7 +151,9 @@
                     Cantidad de participantes
                 </label>
 
-                <input type="number" id="participantes" name="participantes" class="form-control" min="1">
+                <input type="number" id="participantes" name="participantes" class="form-control" min="1" max="20" step="1" aria-describedby="ayuda-participantes error-participantes">
+
+                <div id="ayuda-participantes" class="form-text">Número entero entre 1 y 20, incluido usted.</div>
 
                 <div id="error-participantes" class="text-danger"></div>
             </div>
@@ -152,7 +164,7 @@
                     Visibilidad
                 </label>
 
-                <select id="visibilidad" name="visibilidad" class="form-select">
+                <select id="visibilidad" name="visibilidad" class="form-select" aria-describedby="error-visibilidad">
 
                     <option value="">Seleccione una visibilidad</option>
                     <option value="Pública">Pública</option>
@@ -167,15 +179,18 @@
 
             <div class="mb-3">
                 <label for="etiquetas" class="form-label">
-                    Etiquetas
+                    Etiquetas (opcional)
                 </label>
 
                 <input type="text" id="etiquetas" name="etiquetas" class="form-control"
-                    placeholder="Ej. tecnología, estudiantes, aplicación">
+                    placeholder="Ej. tecnología, estudiantes, aplicación"
+                    aria-describedby="ayuda-etiquetas error-etiquetas">
 
-                <div class="form-text">
-                    Separe las etiquetas con comas.
+                <div id="ayuda-etiquetas" class="form-text">
+                    Separe las etiquetas con comas. Cada una entre 2 y 20 caracteres, sin repetir.
                 </div>
+
+                <div id="error-etiquetas" class="text-danger"></div>
             </div>
 
 
@@ -184,6 +199,10 @@
                 <h2 id="titulo-competencias" class="h4">
                     Competencias requeridas
                 </h2>
+
+                <p id="ayuda-competencias" class="form-text">
+                    Seleccione al menos una competencia, sin repetir.
+                </p>
 
                 <div id="lista-competencias">
                 </div>

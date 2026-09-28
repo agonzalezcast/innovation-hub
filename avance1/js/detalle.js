@@ -141,6 +141,8 @@ function mostrarDetalleCompleto(iniciativa, usuario) {
             : `<a href="publicar-iniciativa.html?editar=${iniciativa.id}" class="btn btn-primary">Editar iniciativa</a>`;
     } else if (esIntegrante(iniciativa, usuario)) {
         accion = `<p class="alert alert-secondary">Usted forma parte del equipo de esta iniciativa.</p>`;
+    } else if (iniciativa.estado === "Archivada") {
+        accion = `<p class="alert alert-secondary">Esta iniciativa está archivada y ya no recibe solicitudes.</p>`;
     }
 
     contenedor.innerHTML = `
@@ -284,9 +286,11 @@ function mostrarDetalleRestringido(iniciativa) {
                 El contenido completo solo está disponible para el propietario y los miembros del equipo.
             </div>
 
-            <a href="solicitud-participacion.html?id=${iniciativa.id}" class="btn btn-primary">
-                Solicitar participación
-            </a>
+            ${iniciativa.estado === "Archivada" ? "" : `
+                <a href="solicitud-participacion.html?id=${iniciativa.id}" class="btn btn-primary">
+                    Solicitar participación
+                </a>
+            `}
         </article>
     `;
 }

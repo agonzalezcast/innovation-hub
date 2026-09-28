@@ -14,7 +14,7 @@ function agregarCompetencia(valor = "") {
     contenedor.className = "input-group mb-2";
 
     contenedor.innerHTML = `
-        <select class="form-select competencia">
+        <select class="form-select competencia" aria-describedby="ayuda-competencias error-competencias">
             <option value="">Seleccione una competencia</option>
             ${crearOpciones(competenciasDisponibles)}
         </select>
@@ -60,159 +60,183 @@ function mostrarError(id, mensaje) {
     document.querySelector(id).textContent = mensaje;
 }
 
-function validarFormulario() {
-    let formularioValido = true;
+const TIPOS = ["Idea", "Necesidad", "Reto"];
+const VISIBILIDADES = ["Pública", "Institucional", "Restringida", "Privada"];
+const MAXIMO_PARTICIPANTES = 20;
 
-    const titulo = document.querySelector("#titulo").value.trim();
-    const tipo = document.querySelector("#tipo").value;
-    const resumen = document.querySelector("#resumen").value.trim();
-    const descripcion = document.querySelector("#descripcion").value.trim();
-    const problema = document.querySelector("#problema").value.trim();
-    const beneficiarios =
-        document.querySelector("#beneficiarios").value.trim();
+let categoriasDisponibles = [];
+let iniciativasExistentes = [];
 
-    const categoria = document.querySelector("#categoria").value;
-
-    const participantes =
-        Number(document.querySelector("#participantes").value);
-
-    const visibilidad =
-        document.querySelector("#visibilidad").value;
-
-    const selectsCompetencias =
-        document.querySelectorAll(".competencia");
-
-
-    if (titulo === "") {
-        mostrarError(
-            "#error-titulo",
-            "El título es obligatorio."
-        );
-
-        formularioValido = false;
-    } else {
-        mostrarError("#error-titulo", "");
+function validarLongitud(valor, minimo, maximo, campo) {
+    if (valor.length < minimo || valor.length > maximo) {
+        return `${campo} debe tener entre ${minimo} y ${maximo} caracteres; ahora tiene ${valor.length}.`;
     }
 
+    return "";
+}
 
-    if (tipo === "") {
-        mostrarError(
-            "#error-tipo",
-            "Debe seleccionar un tipo de iniciativa."
+function validarSeleccion(valor, opciones, mensaje) {
+    return opciones.includes(valor) ? "" : mensaje;
+}
+
+function separarEtiquetas(texto) {
+    return texto
+        .split(",")
+        .map(etiqueta => etiqueta.trim())
+        .filter(etiqueta => etiqueta !== "");
+}
+
+// Reglas por campo: cada una recibe el valor y devuelve el mensaje de error, o "" si es válido
+const reglas = {
+    titulo: valor => {
+        if (valor === "") {
+            return "El título es obligatorio.";
+        }
+
+        const repetido = iniciativasExistentes.some(iniciativa =>
+            iniciativa.id !== idEditar &&
+            iniciativa.titulo.toLowerCase() === valor.toLowerCase()
         );
 
-        formularioValido = false;
-    } else {
-        mostrarError("#error-tipo", "");
+        if (repetido) {
+            return "Ya existe una iniciativa con este título. Use uno diferente.";
+        }
+
+        return validarLongitud(valor, 5, 80, "El título");
+    },
+
+    tipo: valor => validarSeleccion(valor, TIPOS, "Debe seleccionar un tipo de iniciativa."),
+
+    resumen: valor => valor === ""
+        ? "El resumen es obligatorio."
+        : validarLongitud(valor, 20, 200, "El resumen"),
+
+    descripcion: valor => valor === ""
+        ? "La descripción es obligatoria."
+        : validarLongitud(valor, 30, 1000, "La descripción"),
+
+    // Problema y beneficiarios son opcionales según RF-I-INI-01; si se completan, se valida la longitud
+    problema: valor => valor === ""
+        ? ""
+        : validarLongitud(valor, 10, 500, "El problema"),
+
+    beneficiarios: valor => valor === ""
+        ? ""
+        : validarLongitud(valor, 10, 150, "El campo de beneficiarios"),
+
+    categoria: valor => validarSeleccion(valor, categoriasDisponibles, "Debe seleccionar una categoría."),
+
+    participantes: valor => {
+        const cantidad = Number(valor);
+
+        if (valor === "") {
+            return "Indique la cantidad estimada de participantes.";
+        }
+
+        if (!Number.isInteger(cantidad)) {
+            return "La cantidad de participantes debe ser un número entero.";
+        }
+
+        if (cantidad < 1 || cantidad > MAXIMO_PARTICIPANTES) {
+            return `La cantidad de participantes debe estar entre 1 y ${MAXIMO_PARTICIPANTES}.`;
+        }
+
+        // RF-I-INI-03: no puede quedar por debajo de los miembros ya aceptados
+        if (iniciativaEditada && cantidad < iniciativaEditada.miembros.length) {
+            return `Debe ser al menos ${iniciativaEditada.miembros.length}, la cantidad de miembros actuales.`;
+        }
+
+        return "";
+    },
+
+    visibilidad: valor => validarSeleccion(valor, VISIBILIDADES, "Debe seleccionar una visibilidad."),
+
+    etiquetas: valor => {
+        const etiquetas = separarEtiquetas(valor);
+        const invalida = etiquetas.find(etiqueta => etiqueta.length < 2 || etiqueta.length > 20);
+
+        if (invalida) {
+            return `Cada etiqueta debe tener entre 2 y 20 caracteres. Revise "${invalida}".`;
+        }
+
+        const distintas = new Set(etiquetas.map(etiqueta => etiqueta.toLowerCase()));
+
+        if (distintas.size !== etiquetas.length) {
+            return "Hay etiquetas repetidas.";
+        }
+
+        return "";
     }
+};
 
+function marcarCampo(control, mensaje) {
+    const invalido = mensaje !== "";
 
-    if (resumen === "") {
-        mostrarError(
-            "#error-resumen",
-            "El resumen es obligatorio."
-        );
+    control.classList.toggle("is-invalid", invalido);
+    control.setAttribute("aria-invalid", invalido);
+}
 
-        formularioValido = false;
-    } else {
-        mostrarError("#error-resumen", "");
-    }
+function validarCampo(campo) {
+    const control = document.querySelector(`#${campo}`);
+    const mensaje = reglas[campo](control.value.trim());
 
+    mostrarError(`#error-${campo}`, mensaje);
+    marcarCampo(control, mensaje);
 
-    if (descripcion === "") {
-        mostrarError(
-            "#error-descripcion",
-            "La descripción es obligatoria."
-        );
+    return mensaje === "";
+}
 
-        formularioValido = false;
-    } else {
-        mostrarError("#error-descripcion", "");
-    }
+function validarCompetencias() {
+    const selects = document.querySelectorAll(".competencia");
+    const elegidas = [];
+    let mensaje = "";
 
+    selects.forEach(select => {
+        const repetida = select.value !== "" && elegidas.includes(select.value);
 
-    if (problema === "") {
-        mostrarError(
-            "#error-problema",
-            "Debe indicar el problema o necesidad."
-        );
+        if (repetida) {
+            mensaje = `La competencia "${select.value}" está repetida. Elimine una de las dos.`;
+        }
 
-        formularioValido = false;
-    } else {
-        mostrarError("#error-problema", "");
-    }
+        marcarCampo(select, repetida ? "repetida" : "");
 
-
-    if (beneficiarios === "") {
-        mostrarError(
-            "#error-beneficiarios",
-            "Debe indicar los beneficiarios."
-        );
-
-        formularioValido = false;
-    } else {
-        mostrarError("#error-beneficiarios", "");
-    }
-
-
-    if (categoria === "") {
-        mostrarError(
-            "#error-categoria",
-            "Debe seleccionar una categoría."
-        );
-
-        formularioValido = false;
-    } else {
-        mostrarError("#error-categoria", "");
-    }
-
-
-    if (participantes <= 0) {
-        mostrarError(
-            "#error-participantes",
-            "La cantidad de participantes debe ser mayor que cero."
-        );
-
-        formularioValido = false;
-    } else {
-        mostrarError("#error-participantes", "");
-    }
-
-
-    if (visibilidad === "") {
-        mostrarError(
-            "#error-visibilidad",
-            "Debe seleccionar una visibilidad."
-        );
-
-        formularioValido = false;
-    } else {
-        mostrarError("#error-visibilidad", "");
-    }
-
-
-    let tieneCompetencia = false;
-
-    selectsCompetencias.forEach(select => {
         if (select.value !== "") {
-            tieneCompetencia = true;
+            elegidas.push(select.value);
         }
     });
 
-    if (!tieneCompetencia) {
-        mostrarError(
-            "#error-competencias",
-            "Debe seleccionar al menos una competencia."
-        );
-
-        formularioValido = false;
-    } else {
-        mostrarError("#error-competencias", "");
+    if (elegidas.length === 0) {
+        mensaje = "Debe seleccionar al menos una competencia.";
+        selects.forEach(select => marcarCampo(select, mensaje));
     }
 
+    mostrarError("#error-competencias", mensaje);
 
-    return formularioValido;
+    return mensaje === "";
 }
+
+function validarFormulario() {
+    const resultados = Object.keys(reglas).map(validarCampo);
+
+    resultados.push(validarCompetencias());
+
+    return resultados.every(resultado => resultado);
+}
+
+// Después del primer intento, cada campo marcado se vuelve a validar mientras el usuario lo corrige
+formIniciativa.addEventListener("input", function (evento) {
+    const control = evento.target;
+
+    if (!control.classList.contains("is-invalid")) {
+        return;
+    }
+
+    if (control.classList.contains("competencia")) {
+        validarCompetencias();
+    } else if (reglas[control.id]) {
+        validarCampo(control.id);
+    }
+});
 
 function crearIniciativa(usuario, id) {
     const competencias = [];
@@ -225,17 +249,7 @@ function crearIniciativa(usuario, id) {
         }
     });
 
-    const textoEtiquetas =
-        document.querySelector("#etiquetas").value.trim();
-
-    let etiquetas = [];
-
-    if (textoEtiquetas !== "") {
-        etiquetas = textoEtiquetas
-            .split(",")
-            .map(etiqueta => etiqueta.trim())
-            .filter(etiqueta => etiqueta !== "");
-    }
+    const etiquetas = separarEtiquetas(document.querySelector("#etiquetas").value);
 
     const iniciativa = {
         id: id,
@@ -330,6 +344,7 @@ formIniciativa.addEventListener("submit", async function (evento) {
     const formularioValido = validarFormulario();
 
     if (!formularioValido) {
+        formIniciativa.querySelector(".is-invalid").focus();
         return;
     }
 
@@ -337,15 +352,6 @@ formIniciativa.addEventListener("submit", async function (evento) {
         const usuario = await obtenerUsuarioActual();
 
         if (iniciativaEditada) {
-            const cantidadMiembros = iniciativaEditada.miembros.length;
-
-            // RF-I-INI-03: no puede quedar por debajo de los miembros ya aceptados
-            if (Number(document.querySelector("#participantes").value) < cantidadMiembros) {
-                mostrarError("#error-participantes",
-                    `Debe ser al menos ${cantidadMiembros}, la cantidad de miembros actuales.`);
-                return;
-            }
-
             // Se conservan id, estado, fechas originales y miembros
             actualizarIniciativa({
                 ...crearIniciativa(usuario, iniciativaEditada.id),
@@ -383,12 +389,15 @@ async function cargarFormulario() {
     btnGuardar.disabled = true;
 
     try {
-        const [categorias, competencias] = await Promise.all([
+        const [categorias, competencias, iniciativas] = await Promise.all([
             obtenerCategorias(),
-            obtenerCompetencias()
+            obtenerCompetencias(),
+            obtenerIniciativas()
         ]);
 
+        categoriasDisponibles = categorias;
         competenciasDisponibles = competencias;
+        iniciativasExistentes = iniciativas;
 
         document.querySelector("#categoria")
             .insertAdjacentHTML("beforeend", crearOpciones(categorias));

@@ -66,14 +66,16 @@
             <div class="mb-3">
                 <label for="rol" class="form-label">Rol que desea desempeñar</label>
                 <input type="text" id="rol" name="rol" class="form-control" maxlength="60"
-                    placeholder="Ej.: Desarrollador frontend" aria-describedby="error-rol" required>
+                    placeholder="Ej.: Desarrollador frontend" aria-describedby="ayuda-rol error-rol" required>
+                <div id="ayuda-rol" class="form-text">Entre 3 y 60 caracteres.</div>
                 <div id="error-rol" class="invalid-feedback">Indique el rol que desea.</div>
             </div>
 
             <div class="mb-4">
                 <label for="disponibilidad" class="form-label">Disponibilidad</label>
                 <input type="text" id="disponibilidad" name="disponibilidad" class="form-control" maxlength="60"
-                    placeholder="Ej.: 6 horas por semana" aria-describedby="error-disponibilidad" required>
+                    placeholder="Ej.: 6 horas por semana" aria-describedby="ayuda-disponibilidad error-disponibilidad" required>
+                <div id="ayuda-disponibilidad" class="form-text">Entre 3 y 60 caracteres. Indique horas o días disponibles.</div>
                 <div id="error-disponibilidad" class="invalid-feedback">Indique su disponibilidad.</div>
             </div>
 
