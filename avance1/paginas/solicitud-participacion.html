@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Solicitar participación — Innovation Hub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+    <link href="../css/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg" data-bs-theme="dark" aria-label="Principal">
+            <div class="container">
+                <a class="navbar-brand" href="../index.html">Innovation Hub</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#menu-principal" aria-controls="menu-principal"
+                    aria-expanded="false" aria-label="Abrir menú de navegación">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="menu-principal">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="catalogo.html">Catálogo</a></li>
+                        <li class="nav-item"><a class="nav-link" href="publicar-iniciativa.html">Publicar iniciativa</a></li>
+                        <li class="nav-item"><a class="nav-link" href="perfil-usuario.html">Mi perfil</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container py-4">
+        <h1>Solicitar participación</h1>
+
+        <div id="estado-solicitud" aria-live="polite"></div>
+
+        <form id="formulario-solicitud" class="d-none col-lg-8" novalidate>
+            <p class="lead">
+                Iniciativa: <strong id="titulo-iniciativa"></strong>
+            </p>
+
+            <div class="mb-3">
+                <label for="mensaje" class="form-label">Mensaje de presentación</label>
+                <textarea id="mensaje" name="mensaje" class="form-control" rows="4"
+                    maxlength="500" aria-describedby="ayuda-mensaje error-mensaje" required></textarea>
+                <div id="ayuda-mensaje" class="form-text">Entre 30 y 500 caracteres. Cuente por qué le interesa participar.</div>
+                <div id="error-mensaje" class="invalid-feedback">El mensaje debe tener entre 30 y 500 caracteres.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="competencia" class="form-label">Competencia principal que aporta</label>
+                <select id="competencia" name="competencia" class="form-select"
+                    aria-describedby="error-competencia" required></select>
+                <div id="error-competencia" class="invalid-feedback">Seleccione una de las competencias requeridas.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="rol" class="form-label">Rol que desea desempeñar</label>
+                <input type="text" id="rol" name="rol" class="form-control" maxlength="60"
+                    placeholder="Ej.: Desarrollador frontend" aria-describedby="error-rol" required>
+                <div id="error-rol" class="invalid-feedback">Indique el rol que desea.</div>
+            </div>
+
+            <div class="mb-4">
+                <label for="disponibilidad" class="form-label">Disponibilidad</label>
+                <input type="text" id="disponibilidad" name="disponibilidad" class="form-control" maxlength="60"
+                    placeholder="Ej.: 6 horas por semana" aria-describedby="error-disponibilidad" required>
+                <div id="error-disponibilidad" class="invalid-feedback">Indique su disponibilidad.</div>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+                <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+                <a id="enlace-cancelar" href="catalogo.html" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+        </form>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row gy-2">
+                <div class="col-md-6">
+                    <p class="fw-semibold mb-1">Innovation Hub</p>
+                    <p class="mb-0">Universidad CENFOTEC · SOFT-12</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">Contacto: <a href="mailto:hub@ejemplo.ac.cr">hub@ejemplo.ac.cr</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/solicitud-participacion.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inicio — Innovation Hub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+    <link href="css/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <nav class="navbar navbar-expand-lg" data-bs-theme="dark" aria-label="Principal">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">Innovation Hub</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#menu-principal" aria-controls="menu-principal"
+                    aria-expanded="false" aria-label="Abrir menú de navegación">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="menu-principal">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="paginas/catalogo.html">Catálogo</a></li>
+                        <li class="nav-item"><a class="nav-link" href="paginas/publicar-iniciativa.html">Publicar iniciativa</a></li>
+                        <li class="nav-item"><a class="nav-link" href="paginas/perfil-usuario.html">Mi perfil</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" aria-labelledby="titulo-principal">
+            <div class="container">
+                <img src="img/portada.svg" class="img-fluid mb-3" width="300" height="300"
+                    alt="Ilustración de una bombilla encendida formada por palabras relacionadas con ideas, creatividad, planificación e innovación">
+                <h1 id="titulo-principal" class="display-5">Innovation Hub</h1>
+                <p class="lead col-lg-8">
+                    Conectamos ideas, necesidades y retos de la comunidad universitaria
+                    con personas dispuestas a colaborar y formar equipos interdisciplinarios.
+                </p>
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <a href="paginas/catalogo.html" class="btn btn-warning btn-lg">Explorar iniciativas</a>
+                    <a href="paginas/publicar-iniciativa.html" class="btn btn-outline-light btn-lg">Publicar una iniciativa</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="seccion" aria-labelledby="titulo-que-es">
+            <div class="container">
+                <h2 id="titulo-que-es">¿Qué es Innovation Hub?</h2>
+                <p class="col-lg-8">
+                    Esta es una plataforma donde estudiantes, docentes y personal administrativo
+                    de la comunidad universitaria publicamos ideas, necesidades y retos, declaramos
+                    las competencias que requieren y conformamos equipos interdisciplinarios.
+                    Cualquier visitante puede consultar las iniciativas públicas sin iniciar sesión;
+                    los usuarios registrados pueden además publicar, solicitar participación e integrar equipos.
+                </p>
+                <p class="col-lg-8">
+                    Únete ahora a la comunidad y comienza a colaborar en iniciativas innovadoras.
+                </p>
+            </div>
+        </section>
+
+        <section class="seccion bg-white" aria-labelledby="titulo-tipos">
+            <div class="container">
+                <h2 id="titulo-tipos">Tipos de iniciativa</h2>
+
+                <div class="row g-4">
+
+                    <div class="col-12 col-md-4">
+                        <article class="card h-100">
+                            <div class="card-body">
+                                <span class="badge badge-tipo--idea mb-2">Idea</span>
+                                <h3 class="h5">Una posible solución</h3>
+                                <p class="card-text">
+                                    Propuesta de una solución, producto, servicio o proyecto.
+                                    Por ejemplo, una plataforma para coordinar voluntarios universitarios.
+                                </p>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <article class="card h-100">
+                            <div class="card-body">
+                                <span class="badge badge-tipo--necesidad mb-2">Necesidad</span>
+                                <h3 class="h5">Un problema sin resolver</h3>
+                                <p class="card-text">
+                                    Situación problemática para la cual todavía no existe una solución definida.
+                                    Por ejemplo, una organización que coordina voluntarios con hojas de cálculo.
+                                </p>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <article class="card h-100">
+                            <div class="card-body">
+                                <span class="badge badge-tipo--reto mb-2">Reto</span>
+                                <h3 class="h5">Un desafío delimitado</h3>
+                                <p class="card-text">
+                                    Problema concreto que requiere que uno o varios equipos propongan una solución.
+                                    Por ejemplo, reducir el tiempo para asignar tutores a estudiantes.
+                                </p>
+                            </div>
+                        </article>
+                    </div>
+
+                </div>
+                
+            </div>
+        </section>
+
+        <section class="seccion" aria-labelledby="titulo-como-funciona">
+            <div class="container">
+                <h2 id="titulo-como-funciona">¿Cómo funciona?</h2>
+                <p class="col-lg-8">
+                    Los usuarios registrados publican iniciativas y declaran las competencias que necesitan.
+                    Otras personas exploran el catálogo, buscan y filtran por tipo, categoría o competencia,
+                    y solicitan participar. El propietario acepta a los participantes, forma el equipo y,
+                    cuando está listo, convierte la iniciativa en proyecto.
+                </p>
+                <div class="row g-4">
+                    <div class="col-12 col-lg-6">
+                        <h3 id="titulo-publicar" class="h4">Cómo publicar una iniciativa</h3>
+                        <ol>
+                            <li>Con su cuenta de usuario registrado, ingrese a <a href="paginas/publicar-iniciativa.html">Publicar iniciativa</a>.</li>
+                            <li>Complete los datos obligatorios: título, tipo, resumen, descripción y categoría.</li>
+                            <li>Describa el problema identificado, la población beneficiada, las competencias requeridas, la cantidad estimada de integrantes y las etiquetas.</li>
+                            <li>Elija el nivel de visibilidad, también obligatorio: pública, institucional, restringida o privada.</li>
+                            <li>Publique la iniciativa. Las privadas no aparecen en el catálogo; solo las consultan el propietario y los miembros del equipo.</li>
+                        </ol>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <h3 id="titulo-participar" class="h4">Cómo participar en una iniciativa</h3>
+                        <ol>
+                            <li>Explore el <a href="paginas/catalogo.html">catálogo</a> y use la búsqueda o los filtros.</li>
+                            <li>Abra el detalle de la iniciativa que le interese.</li>
+                            <li>Revise las competencias requeridas y los espacios disponibles.</li>
+                            <li>Con su cuenta de usuario registrado, envíe una solicitud con su mensaje de presentación, la competencia principal que aporta, el rol que desea y su disponibilidad.</li>
+                            <li>La solicitud queda en estado Pendiente hasta que el propietario la acepte o la rechace; si la acepta, usted se incorpora al equipo.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row gy-2">
+                <div class="col-md-6">
+                    <p class="fw-semibold mb-1">Innovation Hub</p>
+                    <p class="mb-0">Universidad CENFOTEC · SOFT-12</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">Contacto: <a href="mailto:hub@ejemplo.ac.cr">hub@ejemplo.ac.cr</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -56,3 +56,15 @@ async function obtenerUsuarioActual() {
 function fechaActual() {
     return new Date().toLocaleDateString("en-CA");
 }
+
+const CLAVE_SOLICITUDES = "solicitudes";
+
+function obtenerSolicitudes() {
+    return JSON.parse(localStorage.getItem(CLAVE_SOLICITUDES)) || [];
+}
+
+function guardarSolicitud(solicitud) {
+    const solicitudes = obtenerSolicitudes();
+    solicitudes.push(solicitud);
+    localStorage.setItem(CLAVE_SOLICITUDES, JSON.stringify(solicitudes));
+}
