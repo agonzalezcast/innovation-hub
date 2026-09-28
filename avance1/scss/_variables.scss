@@ -23,6 +23,10 @@ $line-height-base:       1.6;
 
 // Espaciados y bordes
 $spacer:           1.1rem;
+
+// El gutter de la grilla sigue al spacer para que las filas g-4 no desborden el contenedor en peque.
+$grid-gutter-width: $spacer * 1.5;
+
 $border-radius:    .5rem;
 $border-radius-lg: .75rem;
 $card-spacer-y:    1.5rem;

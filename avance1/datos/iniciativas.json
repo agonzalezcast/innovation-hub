@@ -377,5 +377,56 @@
                 "fechaIncorporacion": "2026-09-05"
             }
         ]
+    },
+    {
+        "id": 9,
+        "titulo": "Apoyo al bienestar estudiantil en época de exámenes",
+        "tipo": "Necesidad",
+        "resumen": "Contar con espacios y recursos que ayuden a los estudiantes a manejar el estrés durante los periodos de exámenes.",
+        "descripcion": "Necesidad de organizar actividades, materiales y un calendario de apoyo para que los estudiantes cuiden su salud física y emocional en las semanas de mayor carga académica.",
+        "problema": "En las semanas de exámenes aumentan el estrés y el cansancio, y muchos estudiantes no conocen los recursos de apoyo disponibles.",
+        "beneficiarios": "Estudiantes de todas las carreras",
+        "categoria": "Salud y Bienestar",
+        "competencias": [
+            "Análisis de datos",
+            "Diseño UX/UI",
+            "Comunicación"
+        ],
+        "participantes": 4,
+        "visibilidad": "Pública",
+        "propietario": "Esteban Rojas",
+        "idPropietario": 10,
+        "estado": "En formación de equipo",
+        "etiquetas": [
+            "bienestar",
+            "salud mental",
+            "exámenes"
+        ],
+        "fechaCreacion": "2026-09-10",
+        "fechaPublicacion": "2026-09-11",
+        "fechaModificacion": "2026-09-20",
+        "miembros": [
+            {
+                "idUsuario": 10,
+                "nombre": "Esteban Rojas",
+                "carrera": "Ciencia de Datos",
+                "competencias": [
+                    "Análisis de datos"
+                ],
+                "rol": "Propietario",
+                "fechaIncorporacion": "2026-09-10"
+            },
+            {
+                "idUsuario": 8,
+                "nombre": "Paula Jiménez",
+                "carrera": "Diseño Digital",
+                "competencias": [
+                    "Diseño UX/UI",
+                    "Comunicación"
+                ],
+                "rol": "Diseñadora",
+                "fechaIncorporacion": "2026-09-15"
+            }
+        ]
     }
 ]
