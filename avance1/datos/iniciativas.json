@@ -16,13 +16,29 @@
         "participantes": 3,
         "visibilidad": "Pública",
         "propietario": "María Rodríguez",
+        "idPropietario": 2,
         "estado": "Publicada",
         "etiquetas": [
             "educación",
             "tutorías",
             "estudiantes"
         ],
-        "miembros": []
+        "fechaCreacion": "2026-08-03",
+        "fechaPublicacion": "2026-08-05",
+        "fechaModificacion": "2026-08-12",
+        "miembros": [
+            {
+                "idUsuario": 2,
+                "nombre": "María Rodríguez",
+                "carrera": "Ingeniería del Software",
+                "competencias": [
+                    "JavaScript",
+                    "Comunicación"
+                ],
+                "rol": "Propietaria",
+                "fechaIncorporacion": "2026-08-03"
+            }
+        ]
     },
     {
         "id": 2,
@@ -41,13 +57,39 @@
         "participantes": 4,
         "visibilidad": "Pública",
         "propietario": "Carlos Méndez",
+        "idPropietario": 3,
         "estado": "Publicada",
         "etiquetas": [
             "voluntariado",
             "comunidad",
             "impacto social"
         ],
-        "miembros": []
+        "fechaCreacion": "2026-08-06",
+        "fechaPublicacion": "2026-08-08",
+        "fechaModificacion": "2026-08-21",
+        "miembros": [
+            {
+                "idUsuario": 3,
+                "nombre": "Carlos Méndez",
+                "carrera": "Desarrollo Web",
+                "competencias": [
+                    "Desarrollo Web",
+                    "Comunicación"
+                ],
+                "rol": "Propietario",
+                "fechaIncorporacion": "2026-08-06"
+            },
+            {
+                "idUsuario": 8,
+                "nombre": "Paula Jiménez",
+                "carrera": "Diseño Digital",
+                "competencias": [
+                    "Diseño UX/UI"
+                ],
+                "rol": "Diseñadora",
+                "fechaIncorporacion": "2026-08-15"
+            }
+        ]
     },
     {
         "id": 3,
@@ -66,13 +108,40 @@
         "participantes": 5,
         "visibilidad": "Institucional",
         "propietario": "Andrea Vargas",
-        "estado": "En desarrollo",
+        "idPropietario": 4,
+        "estado": "En formación de equipo",
         "etiquetas": [
             "sostenibilidad",
             "sensores",
             "tecnología"
         ],
-        "miembros": []
+        "fechaCreacion": "2026-08-18",
+        "fechaPublicacion": "2026-08-20",
+        "fechaModificacion": "2026-09-02",
+        "miembros": [
+            {
+                "idUsuario": 4,
+                "nombre": "Andrea Vargas",
+                "carrera": "Ingeniería Ambiental",
+                "competencias": [
+                    "Electrónica",
+                    "Internet de las Cosas"
+                ],
+                "rol": "Propietaria",
+                "fechaIncorporacion": "2026-08-18"
+            },
+            {
+                "idUsuario": 1,
+                "nombre": "Andrés Quesada Mora",
+                "carrera": "Ingeniería del Software",
+                "competencias": [
+                    "JavaScript",
+                    "Trabajo en equipo"
+                ],
+                "rol": "Desarrollador",
+                "fechaIncorporacion": "2026-08-25"
+            }
+        ]
     },
     {
         "id": 4,
@@ -90,14 +159,30 @@
         ],
         "participantes": 2,
         "visibilidad": "Pública",
-        "propietario": "Luis Hernández",
+        "propietario": "Andrés Quesada Mora",
+        "idPropietario": 1,
         "estado": "Publicada",
         "etiquetas": [
             "orientación",
             "estudiantes",
             "universidad"
         ],
-        "miembros": []
+        "fechaCreacion": "2026-08-22",
+        "fechaPublicacion": "2026-08-24",
+        "fechaModificacion": "2026-09-10",
+        "miembros": [
+            {
+                "idUsuario": 1,
+                "nombre": "Andrés Quesada Mora",
+                "carrera": "Ingeniería del Software",
+                "competencias": [
+                    "Diseño UX/UI",
+                    "Trabajo en equipo"
+                ],
+                "rol": "Propietario",
+                "fechaIncorporacion": "2026-08-22"
+            }
+        ]
     },
     {
         "id": 5,
@@ -116,13 +201,29 @@
         "participantes": 3,
         "visibilidad": "Restringida",
         "propietario": "Daniel Soto",
-        "estado": "En revisión",
+        "idPropietario": 5,
+        "estado": "En formación de equipo",
         "etiquetas": [
             "equipos",
             "préstamos",
             "universidad"
         ],
-        "miembros": []
+        "fechaCreacion": "2026-08-27",
+        "fechaPublicacion": "2026-08-29",
+        "fechaModificacion": "2026-09-08",
+        "miembros": [
+            {
+                "idUsuario": 5,
+                "nombre": "Daniel Soto",
+                "carrera": "Ingeniería del Software",
+                "competencias": [
+                    "Bases de datos",
+                    "Desarrollo Web"
+                ],
+                "rol": "Propietario",
+                "fechaIncorporacion": "2026-08-27"
+            }
+        ]
     },
     {
         "id": 6,
@@ -141,13 +242,29 @@
         "participantes": 4,
         "visibilidad": "Pública",
         "propietario": "Sofía Castro",
+        "idPropietario": 6,
         "estado": "Publicada",
         "etiquetas": [
             "alimentos",
             "sostenibilidad",
             "desperdicio"
         ],
-        "miembros": []
+        "fechaCreacion": "2026-09-01",
+        "fechaPublicacion": "2026-09-03",
+        "fechaModificacion": "2026-09-14",
+        "miembros": [
+            {
+                "idUsuario": 6,
+                "nombre": "Sofía Castro",
+                "carrera": "Administración de Empresas",
+                "competencias": [
+                    "Investigación",
+                    "Análisis de datos"
+                ],
+                "rol": "Propietaria",
+                "fechaIncorporacion": "2026-09-01"
+            }
+        ]
     },
     {
         "id": 7,
@@ -166,13 +283,49 @@
         "participantes": 5,
         "visibilidad": "Pública",
         "propietario": "Jorge Ramírez",
-        "estado": "Publicada",
+        "idPropietario": 7,
+        "estado": "Convertida en proyecto",
         "etiquetas": [
             "movilidad",
             "campus",
             "tecnología"
         ],
-        "miembros": []
+        "fechaCreacion": "2026-08-10",
+        "fechaPublicacion": "2026-08-12",
+        "fechaModificacion": "2026-09-18",
+        "miembros": [
+            {
+                "idUsuario": 7,
+                "nombre": "Jorge Ramírez",
+                "carrera": "Ingeniería del Software",
+                "competencias": [
+                    "Desarrollo Web",
+                    "Análisis de datos"
+                ],
+                "rol": "Propietario",
+                "fechaIncorporacion": "2026-08-10"
+            },
+            {
+                "idUsuario": 9,
+                "nombre": "Natalia Brenes",
+                "carrera": "Diseño Digital",
+                "competencias": [
+                    "Diseño UX/UI"
+                ],
+                "rol": "Diseñadora",
+                "fechaIncorporacion": "2026-08-19"
+            },
+            {
+                "idUsuario": 10,
+                "nombre": "Esteban Rojas",
+                "carrera": "Ciencia de Datos",
+                "competencias": [
+                    "Análisis de datos"
+                ],
+                "rol": "Analista de datos",
+                "fechaIncorporacion": "2026-08-26"
+            }
+        ]
     },
     {
         "id": 8,
@@ -189,14 +342,30 @@
             "Marketing"
         ],
         "participantes": 3,
-        "visibilidad": "Pública",
-        "propietario": "Valeria Gómez",
-        "estado": "En desarrollo",
+        "visibilidad": "Privada",
+        "propietario": "Andrés Quesada Mora",
+        "idPropietario": 1,
+        "estado": "En formación de equipo",
         "etiquetas": [
             "cultura",
             "arte",
             "eventos"
         ],
-        "miembros": []
+        "fechaCreacion": "2026-09-05",
+        "fechaPublicacion": "2026-09-07",
+        "fechaModificacion": "2026-09-20",
+        "miembros": [
+            {
+                "idUsuario": 1,
+                "nombre": "Andrés Quesada Mora",
+                "carrera": "Ingeniería del Software",
+                "competencias": [
+                    "Diseño UX/UI",
+                    "Trabajo en equipo"
+                ],
+                "rol": "Propietario",
+                "fechaIncorporacion": "2026-09-05"
+            }
+        ]
     }
 ]

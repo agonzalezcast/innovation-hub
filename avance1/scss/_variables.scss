@@ -1,0 +1,32 @@
+// Paleta propia ( Colores dummy por el momento) 
+$azul-petroleo: #0f5c6e;
+$amarillo:         #f2a900;
+$fondo-oscuro:       #4a5560;
+$fondo:         #f7f9fa;
+$texto:         #1f2a30;
+
+// Sobrescritura de variables de Bootstrap
+$primary:   $azul-petroleo;
+$secondary: $fondo-oscuro;
+$warning:   $amarillo;
+
+$body-bg:    $fondo;
+$body-color: $texto;
+
+// Tipografia
+
+//TODO: REVISAR TIPOGRAFÍA
+$font-family-sans-serif: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$headings-font-family:   "Poppins", $font-family-sans-serif;
+$headings-font-weight:   600;
+$line-height-base:       1.6;
+
+// Espaciados y bordes
+$spacer:           1.1rem;
+$border-radius:    .5rem;
+$border-radius-lg: .75rem;
+$card-spacer-y:    1.5rem;
+$card-spacer-x:    1.5rem;
+
+// Accesibilidad: Bootstrap elige texto claro u oscuro con este contraste mínimo.
+$min-contrast-ratio: 4.5;

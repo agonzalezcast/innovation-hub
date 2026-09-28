@@ -1,0 +1,14 @@
+{
+  "name": "innovation-hub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Innovation Hub — proyecto del curso SOFT-12",
+  "scripts": {
+    "sass": "sass avance1/scss/main.scss avance1/css/main.css --load-path=node_modules --no-source-map --style=compressed --quiet-deps --silence-deprecation=import",
+    "sass:watch": "npm run sass -- --watch"
+  },
+  "devDependencies": {
+    "bootstrap": "5.3.3",
+    "sass": "^1.77.0"
+  }
+}

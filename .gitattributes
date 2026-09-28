@@ -1,0 +1,5 @@
+#Reduccion en git para el compilado que la consigna exige. 
+avance1/css/*.css linguist-generated=true -diff
+
+# Lista exacta de dependencias que genera npm
+package-lock.json -diff

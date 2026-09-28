@@ -1,0 +1,13 @@
+// *** Cuidado con el orden de importación: primero variables, luego Bootstrap, luego estilos propios ***
+
+// 1. Variables propias (sobrescriben las de Bootstrap)
+@import "variables";
+
+// 2. Bootstrap completo
+@import "bootstrap/scss/bootstrap";
+
+
+// 3. Estilos propios
+@import "mixins";
+@import "layout";
+@import "componentes";

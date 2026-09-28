@@ -11,21 +11,7 @@ async function cargarDetalle() {
         const parametros = new URLSearchParams(window.location.search);
         const id = Number(parametros.get("id"));
 
-        const respuesta = await fetch("../datos/iniciativas.json");
-
-        if (!respuesta.ok) {
-            throw new Error("No se pudieron cargar las iniciativas");
-        }
-
-        let iniciativas = await respuesta.json();
-
-        const iniciativasGuardadas = JSON.parse(localStorage.getItem("iniciativas")) || [];
-
-        iniciativas = iniciativas.concat(iniciativasGuardadas);
-
-        const iniciativa = iniciativas.find(
-            iniciativa => iniciativa.id === id
-        );
+        const iniciativa = await obtenerIniciativaPorId(id);
 
         if (!iniciativa) {
             mostrarIniciativaNoEncontrada();
