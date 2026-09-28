@@ -1,4 +1,7 @@
 let iniciativas = [];
+let usuarioActual;
+let iniciativaPorConfirmar = null;
+const modalConfirmacion = new bootstrap.Modal("#modal-confirmacion");
 
 async function cargarIniciativas() {
     const contenedor = document.querySelector("#contenedor-iniciativas");
@@ -10,7 +13,10 @@ async function cargarIniciativas() {
         `;
 
     try {
-        iniciativas = await obtenerIniciativas();
+        [iniciativas, usuarioActual] = await Promise.all([
+            obtenerIniciativas(),
+            obtenerUsuarioActual()
+        ]);
 
         mostrarIniciativas(iniciativas);
 
@@ -56,6 +62,10 @@ function mostrarIniciativas(listaIniciativas) {
 }
 
 function crearTarjetaIniciativa(iniciativa) {
+    const esPropietario = iniciativa.idPropietario === usuarioActual.id;
+    const puedeGestionar = esPropietario && iniciativa.estado !== "Archivada";
+    const accionBorrar = tieneInformacionRelacionada(iniciativa) ? "Archivar" : "Eliminar";
+
     const columna = document.createElement("div");
     columna.className = "col-12 col-md-6 col-lg-4";
     columna.innerHTML = `
@@ -87,14 +97,23 @@ function crearTarjetaIniciativa(iniciativa) {
                     ${iniciativa.estado}
                 </p>
             </div>
-            <div class="card-footer bg-transparent">
-                <a href="detalle.html?id=${iniciativa.id}"
-                   class="btn btn-primary">
+            <div class="card-footer bg-transparent d-flex flex-wrap gap-2">
+                <a href="detalle.html?id=${iniciativa.id}" class="btn btn-primary">
                     Ver detalle
                 </a>
+                ${puedeGestionar ? `
+                    <a href="publicar-iniciativa.html?editar=${iniciativa.id}" class="btn btn-outline-primary">Editar</a>
+                    <button type="button" class="btn btn-outline-danger btn-borrar">${accionBorrar}</button>
+                ` : ""}
             </div>
         </article>
         `;
+
+    if (puedeGestionar) {
+        columna.querySelector(".btn-borrar")
+            .addEventListener("click", () => abrirConfirmacion(iniciativa));
+    }
+
     return columna;
 }
 
@@ -167,5 +186,45 @@ btnLimpiar.addEventListener("click", function () {
     mostrarIniciativas(iniciativas);
 });
 
+function abrirConfirmacion(iniciativa) {
+    iniciativaPorConfirmar = iniciativa;
+    const archivar = tieneInformacionRelacionada(iniciativa);
+
+    // RF-I-INI-04: la confirmación indica título, acción y mensaje
+    document.querySelector("#titulo-modal").textContent =
+        archivar ? "Archivar iniciativa" : "Eliminar iniciativa";
+
+    document.querySelector("#mensaje-modal").textContent = archivar
+        ? `"${iniciativa.titulo}" tiene miembros o solicitudes asociadas, por lo que no se puede eliminar. Se archivará: quedará en estado Archivada y ya no podrá modificarse.`
+        : `¿Desea eliminar "${iniciativa.titulo}"? Esta acción no se puede deshacer.`;
+
+    document.querySelector("#btn-confirmar").textContent = archivar ? "Archivar" : "Eliminar";
+
+    modalConfirmacion.show();
+}
+
+document.querySelector("#btn-confirmar").addEventListener("click", async () => {
+    const iniciativa = iniciativaPorConfirmar;
+    const archivar = tieneInformacionRelacionada(iniciativa);
+
+    if (archivar) {
+        archivarIniciativa(iniciativa);
+    } else {
+        eliminarIniciativa(iniciativa.id);
+    }
+
+    modalConfirmacion.hide();
+
+    // Se vuelve a pintar el catálogo sin recargar, respetando los filtros activos
+    iniciativas = await obtenerIniciativas();
+    aplicarFiltros();
+
+    document.querySelector("#mensaje-catalogo").innerHTML = `
+        <div class="alert alert-success alert-dismissible fade show" role="status">
+            La iniciativa "${iniciativa.titulo}" fue ${archivar ? "archivada" : "eliminada"}.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    `;
+});
 
 cargarIniciativas();

@@ -181,6 +181,16 @@
                 ],
                 "rol": "Propietario",
                 "fechaIncorporacion": "2026-08-22"
+            },
+            {
+                "idUsuario": 3,
+                "nombre": "Carlos Méndez",
+                "carrera": "Desarrollo Web",
+                "competencias": [
+                    "Comunicación"
+                ],
+                "rol": "Colaborador",
+                "fechaIncorporacion": "2026-09-02"
             }
         ]
     },
