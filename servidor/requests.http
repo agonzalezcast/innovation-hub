@@ -1,0 +1,4 @@
+# requests.http
+# Peticiones de prueba para la extensión REST Client de VS Code.
+ 
+@api = http://localhost:3000/api
