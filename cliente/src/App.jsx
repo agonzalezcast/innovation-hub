@@ -8,6 +8,7 @@ import DetalleIniciativa from './paginas/DetalleIniciativa.jsx'
 import PublicarIniciativa from './paginas/PublicarIniciativa.jsx'
 import IniciarSesion from './paginas/IniciarSesion.jsx'
 import Registro from './paginas/Registro.jsx'
+import MiPerfil from './paginas/MiPerfil.jsx'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/publicar" element={<PublicarIniciativa />} />
         <Route path="/login" element={<IniciarSesion />} />
         <Route path="/registro" element={<Registro />} />
+        <Route path="/mi-perfil" element={<MiPerfil />} />
       </Routes>
 
       <Footer />

@@ -48,7 +48,14 @@ function Encabezado() {
                   <span className="navbar-text">
                     {usuario.fullName}
                   </span>
-
+                  <NavLink
+                    to="/mi-perfil"
+                    className={({ isActive }) =>
+                      `nav-link ${isActive ? 'active' : ''}`
+                    }
+                  >
+                    Mi perfil
+                  </NavLink>
                   <button
                     type="button"
                     className="btn btn-outline-light btn-sm"
