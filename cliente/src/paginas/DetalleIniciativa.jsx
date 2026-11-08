@@ -1,9 +1,12 @@
 import { Link, useParams } from 'react-router-dom'
 import iniciativas from '../../../avance1/datos/iniciativas.json'
-import sesion from '../../../avance1/datos/sesion.json'
+import { useAuth } from '../contextos/AuthContext.jsx'
+import FormularioSolicitud from '../componentes/solicitudes/FormularioSolicitud.jsx'
 
 function DetalleIniciativa() {
+  
   const { id } = useParams()
+  const { usuario } = useAuth()
 
   const iniciativa = iniciativas.find(
     (item) => item.id === Number(id)
@@ -25,7 +28,7 @@ function DetalleIniciativa() {
     )
   }
 
-  const idUsuarioActual = sesion.idUsuarioActual
+  const idUsuarioActual = usuario?.id
   const miembros = iniciativa.miembros ?? []
 
   const esPropietario = iniciativa.idPropietario === idUsuarioActual
@@ -34,12 +37,14 @@ function DetalleIniciativa() {
     (miembro) => miembro.idUsuario === idUsuarioActual
   )
 
-  const tieneAccesoCompleto = esPropietario || esMiembro
-
   const espaciosDisponibles = Math.max(
     0,
     iniciativa.participantes - miembros.length
   )
+
+  const puedeSolicitar = usuario && !esPropietario && !esMiembro && espaciosDisponibles > 0 && ['Publicada', 'En formación de equipo'].includes(iniciativa.estado)
+
+  const tieneAccesoCompleto = esPropietario || esMiembro
 
   // Iniciativa privada: solamente propietario y miembros.
   if (iniciativa.visibilidad === 'Privada' && !tieneAccesoCompleto) {
@@ -60,7 +65,7 @@ function DetalleIniciativa() {
   }
 
   // Iniciativa institucional: requiere usuario autenticado.
-  if (iniciativa.visibilidad === 'Institucional' && !idUsuarioActual) {
+  if (iniciativa.visibilidad === 'Institucional' && !usuario) {
     return (
       <main className="container py-4">
         <Link to="/catalogo" className="btn btn-outline-secondary mb-4">
@@ -273,6 +278,18 @@ function DetalleIniciativa() {
             </span>
           ))}
         </section>
+
+        {puedeSolicitar && (
+          <section className="mb-4">
+            <FormularioSolicitud iniciativaId={iniciativa.id} />
+          </section>
+        )}
+
+        {!usuario && espaciosDisponibles > 0 && (
+          <div className="alert alert-info">
+            Debe <Link to="/login">iniciar sesión</Link> para solicitar participación.
+          </div>
+        )}
       </article>
     </main>
   )
