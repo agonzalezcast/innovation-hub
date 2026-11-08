@@ -86,8 +86,8 @@ function FiltrosIniciativas({
                         <option value="">Todas</option>
 
                         {competencias.map((opcion) => (
-                            <option key={opcion} value={opcion}>
-                                {opcion}
+                            <option key={opcion.id} value={opcion.id}>
+                                {opcion.name}
                             </option>
                         ))}
                     </select>

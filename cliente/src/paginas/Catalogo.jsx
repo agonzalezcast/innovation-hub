@@ -1,61 +1,107 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import ListaIniciativas from '../componentes/iniciativas/ListaIniciativas.jsx'
 import FiltrosIniciativas from '../componentes/iniciativas/FiltrosIniciativas.jsx'
+import { peticion } from '../servicios/api.js'
+import { useAuth } from '../contextos/AuthContext.jsx'
 
-import iniciativas from '../../../avance1/datos/iniciativas.json'
+const categorias = [
+  'Tecnología',
+  'Educación',
+  'Sostenibilidad',
+  'Impacto social',
+  'Negocios y emprendimiento',
+  'Salud y bienestar',
+  'Cultura y creatividad',
+  'Otro'
+]
 
 function Catalogo() {
+  const { usuario, cargando } = useAuth()
+
+  const [iniciativas, setIniciativas] = useState([])
+  const [competencias, setCompetencias] = useState([])
+
   const [busqueda, setBusqueda] = useState('')
   const [tipo, setTipo] = useState('')
   const [categoria, setCategoria] = useState('')
   const [competencia, setCompetencia] = useState('')
 
-  const iniciativasPublicas = iniciativas.filter(
-    (iniciativa) => iniciativa.visibilidad !== 'Privada'
-  )
+  const [pagina, setPagina] = useState(1)
+  const [totalPaginas, setTotalPaginas] = useState(1)
 
-  const categorias = [
-    ...new Set(iniciativasPublicas.map((iniciativa) => iniciativa.categoria))
-  ].sort()
+  const [cargandoDatos, setCargandoDatos] = useState(true)
+  const [error, setError] = useState('')
 
-  const competencias = [
-    ...new Set(
-      iniciativasPublicas.flatMap((iniciativa) => iniciativa.competencias)
-    )
-  ].sort()
+  useEffect(() => {
+    async function cargarCompetencias() {
+      try {
+        const datos = await peticion('/skills')
+        setCompetencias(datos.items || [])
+      } catch {
+        setCompetencias([])
+      }
+    }
 
-  const iniciativasFiltradas = iniciativasPublicas.filter((iniciativa) => {
-    const texto = busqueda.toLowerCase().trim()
+    cargarCompetencias()
+  }, [])
 
-    const coincideBusqueda =
-      texto === '' ||
-      iniciativa.titulo.toLowerCase().includes(texto) ||
-      iniciativa.resumen.toLowerCase().includes(texto) ||
-      iniciativa.etiquetas.join(' ').toLowerCase().includes(texto)
+  useEffect(() => {
+    if (cargando) return
 
-    const coincideTipo =
-      tipo === '' || iniciativa.tipo === tipo
+    let activo = true
 
-    const coincideCategoria =
-      categoria === '' || iniciativa.categoria === categoria
+    async function cargarIniciativas() {
+      setCargandoDatos(true)
+      setError('')
 
-    const coincideCompetencia =
-      competencia === '' || iniciativa.competencias.includes(competencia)
+      const parametros = new URLSearchParams({
+        page: pagina,
+        size: 9
+      })
 
-    return (
-      coincideBusqueda &&
-      coincideTipo &&
-      coincideCategoria &&
-      coincideCompetencia
-    )
-  })
+      if (busqueda.trim()) parametros.set('q', busqueda.trim())
+      if (tipo) parametros.set('type', tipo)
+      if (categoria) parametros.set('category', categoria)
+      if (competencia) parametros.set('skill', competencia)
+
+      try {
+        const datos = await peticion(`/initiatives?${parametros}`)
+
+        if (activo) {
+          setIniciativas(datos.items || [])
+          setTotalPaginas(datos.totalPages || 1)
+        }
+      } catch (err) {
+        if (activo) {
+          setError(err.message)
+          setIniciativas([])
+        }
+      } finally {
+        if (activo) setCargandoDatos(false)
+      }
+    }
+
+    cargarIniciativas()
+
+    return () => {
+      activo = false
+    }
+  }, [busqueda, tipo, categoria, competencia, pagina, usuario?.id, cargando])
 
   function limpiarFiltros() {
     setBusqueda('')
     setTipo('')
     setCategoria('')
     setCompetencia('')
+    setPagina(1)
+  }
+
+  function cambiarFiltro(actualizar) {
+    return (valor) => {
+      actualizar(valor)
+      setPagina(1)
+    }
   }
 
   return (
@@ -66,13 +112,13 @@ function Catalogo() {
         <div className="col-12 col-lg-3">
           <FiltrosIniciativas
             busqueda={busqueda}
-            setBusqueda={setBusqueda}
+            setBusqueda={cambiarFiltro(setBusqueda)}
             tipo={tipo}
-            setTipo={setTipo}
+            setTipo={cambiarFiltro(setTipo)}
             categoria={categoria}
-            setCategoria={setCategoria}
+            setCategoria={cambiarFiltro(setCategoria)}
             competencia={competencia}
-            setCompetencia={setCompetencia}
+            setCompetencia={cambiarFiltro(setCompetencia)}
             categorias={categorias}
             competencias={competencias}
             onLimpiar={limpiarFiltros}
@@ -84,12 +130,50 @@ function Catalogo() {
           aria-labelledby="titulo-resultados"
         >
           <h2 id="titulo-resultados" className="mb-4">
-            {iniciativasFiltradas.length === 1
-              ? '1 iniciativa encontrada'
-              : `${iniciativasFiltradas.length} iniciativas encontradas`}
+            Resultados
           </h2>
 
-          <ListaIniciativas iniciativas={iniciativasFiltradas} />
+          {cargandoDatos ? (
+            <p>Cargando iniciativas...</p>
+          ) : error ? (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          ) : (
+            <>
+              <p>
+                {iniciativas.length} iniciativas en esta página
+              </p>
+
+              <ListaIniciativas iniciativas={iniciativas} />
+
+              {totalPaginas > 1 && (
+                <div className="d-flex justify-content-center align-items-center gap-3 mt-4">
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    disabled={pagina === 1}
+                    onClick={() => setPagina(pagina - 1)}
+                  >
+                    Anterior
+                  </button>
+
+                  <span>
+                    Página {pagina} de {totalPaginas}
+                  </span>
+
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    disabled={pagina >= totalPaginas}
+                    onClick={() => setPagina(pagina + 1)}
+                  >
+                    Siguiente
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </section>
       </div>
     </main>
