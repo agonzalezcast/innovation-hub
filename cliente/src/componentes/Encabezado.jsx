@@ -21,6 +21,12 @@ function Encabezado() {
             }>
               Catálogo
             </NavLink>
+
+            <NavLink to="/publicar" className={({ isActive }) =>
+              `nav-link ${isActive ? 'active' : ''}`
+            }>
+              Publicar iniciativa
+            </NavLink>
           </div>
         </div>
       </nav>
