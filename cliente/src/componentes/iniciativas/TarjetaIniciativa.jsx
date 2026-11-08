@@ -7,7 +7,7 @@ function TarjetaIniciativa({ iniciativa }) {
     )
 
     return (
-        <article className="card h-100">
+        <article className="card tarjeta-iniciativa h-100">
             <div className="card-body">
                 <div className="mb-2">
                     <span className={`badge badge-tipo--${iniciativa.tipo.toLowerCase()}`}>
