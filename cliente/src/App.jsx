@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 
 import Encabezado from './componentes/Encabezado.jsx'
 import Footer from './componentes/Footer.jsx'
+import Inicio from './paginas/Inicio.jsx'
 import Catalogo from './paginas/Catalogo.jsx'
 
 function App() {
@@ -10,7 +11,7 @@ function App() {
       <Encabezado />
 
       <Routes>
-        <Route path="/" element={<Catalogo />} />
+        <Route path="/" element={<Inicio />} />
         <Route path="/catalogo" element={<Catalogo />} />
       </Routes>
 
