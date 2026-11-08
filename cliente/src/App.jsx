@@ -4,6 +4,7 @@ import Encabezado from './componentes/Encabezado.jsx'
 import Footer from './componentes/Footer.jsx'
 import Inicio from './paginas/Inicio.jsx'
 import Catalogo from './paginas/Catalogo.jsx'
+import DetalleIniciativa from './paginas/DetalleIniciativa.jsx'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Inicio />} />
         <Route path="/catalogo" element={<Catalogo />} />
+        <Route path="/iniciativas/:id" element={<DetalleIniciativa />} />
       </Routes>
 
       <Footer />

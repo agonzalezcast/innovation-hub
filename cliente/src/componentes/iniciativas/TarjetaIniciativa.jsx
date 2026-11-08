@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function TarjetaIniciativa({ iniciativa }) {
     const integrantes = iniciativa.miembros?.length ?? 0
 
@@ -46,9 +48,9 @@ function TarjetaIniciativa({ iniciativa }) {
                 </p>
             </div>
             <div className="card-footer bg-transparent d-flex flex-wrap gap-2">
-                <button type="button" className="btn btn-primary" disabled>
+                <Link to={`/iniciativas/${iniciativa.id}`} className="btn btn-primary">
                     Ver detalle
-                </button>
+                </Link>
             </div>
         </article>
     )
