@@ -9,6 +9,8 @@ import PublicarIniciativa from './paginas/PublicarIniciativa.jsx'
 import IniciarSesion from './paginas/IniciarSesion.jsx'
 import Registro from './paginas/Registro.jsx'
 import MiPerfil from './paginas/MiPerfil.jsx'
+import DirectorioUsuarios from './paginas/DirectorioUsuarios.jsx'
+import PerfilPublico from './paginas/PerfilPublico.jsx'
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route path="/login" element={<IniciarSesion />} />
         <Route path="/registro" element={<Registro />} />
         <Route path="/mi-perfil" element={<MiPerfil />} />
+        <Route path="/usuarios" element={<DirectorioUsuarios />} />
+        <Route path="/usuarios/:id" element={<PerfilPublico />} />
       </Routes>
 
       <Footer />
