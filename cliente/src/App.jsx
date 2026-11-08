@@ -6,6 +6,7 @@ import Inicio from './paginas/Inicio.jsx'
 import Catalogo from './paginas/Catalogo.jsx'
 import DetalleIniciativa from './paginas/DetalleIniciativa.jsx'
 import PublicarIniciativa from './paginas/PublicarIniciativa.jsx'
+import IniciarSesion from './paginas/IniciarSesion.jsx'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/catalogo" element={<Catalogo />} />
         <Route path="/iniciativas/:id" element={<DetalleIniciativa />} />
         <Route path="/publicar" element={<PublicarIniciativa />} />
+        <Route path="/login" element={<IniciarSesion />} />
       </Routes>
 
       <Footer />

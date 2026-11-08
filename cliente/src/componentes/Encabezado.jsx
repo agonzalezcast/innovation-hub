@@ -27,6 +27,14 @@ function Encabezado() {
             }>
               Publicar iniciativa
             </NavLink>
+
+            <NavLink
+              to="/login" className={({ isActive }) =>
+                `nav-link ${isActive ? 'active' : ''}`
+              }
+            >
+              Iniciar sesión
+            </NavLink>
           </div>
         </div>
       </nav>
