@@ -1,6 +1,20 @@
 import { NavLink } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contextos/AuthContext.jsx'
 
 function Encabezado() {
+  const { usuario, cargando, cerrarSesion } = useAuth()
+  const navigate = useNavigate()
+
+  async function manejarCerrarSesion() {
+    try {
+      await cerrarSesion()
+      navigate('/login')
+    } catch {
+      navigate('/login')
+    }
+  }
+
   return (
     <header className="site-header">
       <nav className="navbar navbar-expand-lg" data-bs-theme="dark" aria-label="Principal">
@@ -28,13 +42,32 @@ function Encabezado() {
               Publicar iniciativa
             </NavLink>
 
-            <NavLink
-              to="/login" className={({ isActive }) =>
-                `nav-link ${isActive ? 'active' : ''}`
-              }
-            >
-              Iniciar sesión
-            </NavLink>
+            {!cargando && (
+              usuario ? (
+                <>
+                  <span className="navbar-text">
+                    {usuario.fullName}
+                  </span>
+
+                  <button
+                    type="button"
+                    className="btn btn-outline-light btn-sm"
+                    onClick={manejarCerrarSesion}
+                  >
+                    Cerrar sesión
+                  </button>
+                </>
+              ) : (
+                <NavLink
+                  to="/login"
+                  className={({ isActive }) =>
+                    `nav-link ${isActive ? 'active' : ''}`
+                  }
+                >
+                  Iniciar sesión
+                </NavLink>
+              )
+            )}
           </div>
         </div>
       </nav>
