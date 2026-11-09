@@ -250,20 +250,23 @@ function DetalleIniciativa() {
               )}
             </section>
 
-            {esPropietario && (
-              <section className="mb-4">
+            {(esPropietario || esMiembro) && (
+              <section className="mb-4 d-flex flex-wrap gap-2">
                 <Link
-                  to={`/iniciativas/${iniciativa.id}/solicitudes`}
-                  className="btn btn-primary"
+                  to={`/iniciativas/${iniciativa.id}/equipo`}
+                  className="btn btn-outline-primary"
                 >
-                  Gestionar solicitudes recibidas
+                  Gestionar equipo
                 </Link>
-              </section>
-            )}
 
-            {puedeSolicitar && (
-              <section className="mb-4">
-                <FormularioSolicitud iniciativaId={iniciativa.id} />
+                {esPropietario && (
+                  <Link
+                    to={`/iniciativas/${iniciativa.id}/solicitudes`}
+                    className="btn btn-primary"
+                  >
+                    Gestionar solicitudes recibidas
+                  </Link>
+                )}
               </section>
             )}
 

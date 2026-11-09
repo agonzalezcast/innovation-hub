@@ -13,6 +13,7 @@ import DirectorioUsuarios from './paginas/DirectorioUsuarios.jsx'
 import PerfilPublico from './paginas/PerfilPublico.jsx'
 import MisSolicitudes from './paginas/MisSolicitudes.jsx'
 import SolicitudesRecibidas from './paginas/SolicitudesRecibidas.jsx'
+import EquipoIniciativa from './paginas/EquipoIniciativa.jsx'
 
 function App() {
   return (
@@ -31,8 +32,9 @@ function App() {
         <Route path="/usuarios/:id" element={<PerfilPublico />} />
         <Route path="/mis-solicitudes" element={<MisSolicitudes />} />
         <Route path="/iniciativas/:id/solicitudes" element={<SolicitudesRecibidas />}/>
+        <Route path="/iniciativas/:id/equipo" element={<EquipoIniciativa />}/>
       </Routes>
-      
+
       <Footer />
     </>
   )
