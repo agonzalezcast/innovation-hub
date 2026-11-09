@@ -33,3 +33,12 @@ export async function cerrarDB() {
   await client.close();
   db = undefined;
 }
+
+export async function ejecutarTransaccion(operacion) {
+  const sesion = client.startSession();
+  try {
+    return await sesion.withTransaction(() => operacion(sesion));
+  } finally {
+    await sesion.endSession();
+  }
+}

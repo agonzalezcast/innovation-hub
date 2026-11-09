@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ObjectId } from 'mongodb';
-import { obtenerDB } from '../config/db.js';
+import { ejecutarTransaccion, obtenerDB } from '../config/db.js';
 import { requerirSesion } from '../middlewares/autenticacion.js';
 import { validarIniciativa } from '../services/validarIniciativa.js';
 
@@ -81,6 +81,25 @@ router.get('/initiatives', sesionOpcional, async (req, res) => {
     page: pagina, size: cantidad, total, totalPages: Math.ceil(total / cantidad) });
 });
 
+router.get('/initiatives/mine', requerirSesion, async (req, res) => {
+  const { page = '1', size = '12' } = req.query;
+  if (typeof page !== 'string' || typeof size !== 'string' || !/^\d+$/.test(page) ||
+      !/^\d+$/.test(size) || Number(page) < 1 || Number(size) < 1 || Number(size) > 100 ||
+      !Number.isSafeInteger(Number(page)) || !Number.isSafeInteger((Number(page) - 1) * Number(size))) {
+    return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Paginación inválida' } });
+  }
+
+  const coleccion = obtenerDB().collection('initiatives');
+  const pagina = Number(page), cantidad = Number(size);
+  const filtro = { ownerId: req.usuario._id };
+  const [documentos, total] = await Promise.all([
+    coleccion.find(filtro).sort({ createdAt: -1, _id: -1 }).skip((pagina - 1) * cantidad).limit(cantidad).toArray(),
+    coleccion.countDocuments(filtro)
+  ]);
+  res.json({ items: await Promise.all(documentos.map((doc) => representar(doc, req.usuario))),
+    page: pagina, size: cantidad, total, totalPages: Math.ceil(total / cantidad) });
+});
+
 router.get('/initiatives/:id', sesionOpcional, async (req, res) => {
   if (!/^[a-f\d]{24}$/i.test(req.params.id)) {
     return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Identificador inválido' } });
@@ -138,6 +157,35 @@ router.put('/initiatives/:id', requerirSesion, async (req, res) => {
   }
   const actualizada = await coleccion.findOne({ _id: iniciativa._id });
   res.json(await representar(actualizada, req.usuario));
+});
+
+router.delete('/initiatives/:id', requerirSesion, async (req, res) => {
+  if (!/^[a-f\d]{24}$/i.test(req.params.id)) {
+    return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Identificador inválido' } });
+  }
+
+  const db = obtenerDB();
+  const id = new ObjectId(req.params.id);
+  await ejecutarTransaccion(async (sesion) => {
+    const iniciativas = db.collection('initiatives');
+    const iniciativa = await iniciativas.findOne({ _id: id }, { session: sesion });
+    if (!iniciativa) throw Object.assign(new Error('Iniciativa inexistente'), { status: 404 });
+    if (String(iniciativa.ownerId) !== String(req.usuario._id)) {
+      throw Object.assign(new Error('Solo el propietario puede eliminar o archivar la iniciativa'), { status: 403 });
+    }
+
+    const solicitudes = await db.collection('requests').findOne({ initiativeId: id }, { session: sesion });
+    const proyecto = await db.collection('projects').findOne({ initiativeId: id }, { session: sesion });
+    const miembrosAdicionales = (iniciativa.members || []).some(
+      (miembro) => String(miembro.userId) !== String(iniciativa.ownerId)
+    );
+    if (solicitudes || proyecto || miembrosAdicionales) {
+      await iniciativas.updateOne({ _id: id }, { $set: { status: 'Archivada', updatedAt: new Date() } }, { session: sesion });
+    } else {
+      await iniciativas.deleteOne({ _id: id }, { session: sesion });
+    }
+  });
+  res.status(204).end();
 });
 
 export default router;
