@@ -5,6 +5,7 @@ import skills from './routes/skills.js';
 import auth from './routes/auth.js';
 import users from './routes/users.js';
 import initiatives from './routes/initiatives.js';
+import requests from './routes/requests.js';
 import { manejarError, rutaNoEncontrada } from './middlewares/errores.js';
 
 const app = express();
@@ -20,7 +21,7 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.use('/api', skills, auth, users, initiatives);
+app.use('/api', skills, auth, users, initiatives, requests);
 
 app.use(rutaNoEncontrada);
 app.use(manejarError);

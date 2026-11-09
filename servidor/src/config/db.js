@@ -19,6 +19,10 @@ export async function conectarDB() {
   await db.collection('initiatives').createIndex({ titleKey: 1 }, {
     unique: true, partialFilterExpression: { titleKey: { $type: 'string' } }
   });
+  await db.collection('requests').createIndex(
+    { initiativeId: 1, requesterId: 1, status: 1 },
+    { unique: true, partialFilterExpression: { status: 'Pendiente' } }
+  );
   await db.collection('sessions').createIndex({ tokenHash: 1 }, { unique: true });
   await db.collection('sessions').createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
   return db;
