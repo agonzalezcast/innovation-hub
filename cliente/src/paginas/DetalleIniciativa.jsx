@@ -267,6 +267,19 @@ function DetalleIniciativa() {
                     Gestionar solicitudes recibidas
                   </Link>
                 )}
+
+                {esPropietario &&
+                  miembros.length >= 2 &&
+                  iniciativa.status !== 'Convertida en proyecto' && (
+                    <section className="mb-4">
+                      <Link
+                        to={`/iniciativas/${iniciativa.id}/convertir`}
+                        className="btn btn-success"
+                      >
+                        Convertir en proyecto
+                      </Link>
+                    </section>
+                  )}
               </section>
             )}
 

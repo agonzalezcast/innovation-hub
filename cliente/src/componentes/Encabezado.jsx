@@ -69,6 +69,13 @@ function Encabezado() {
                   >
                     Mis solicitudes
                   </NavLink>
+                  <NavLink to="/proyectos" className={({ isActive }) =>
+                      `nav-link ${isActive ? 'active' : ''}`
+                    }
+                  >
+                    Mis proyectos
+                  </NavLink>
+
                   <button type="button" className="btn btn-outline-light btn-sm" onClick={manejarCerrarSesion}>
                     Cerrar sesión
                   </button>
