@@ -188,4 +188,38 @@ router.delete('/initiatives/:id', requerirSesion, async (req, res) => {
   res.status(204).end();
 });
 
+router.get('/initiatives/:id/members', requerirSesion, async (req, res) => {
+  if (!/^[a-f\d]{24}$/i.test(req.params.id)) {
+    return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Identificador inválido' } });
+  }
+  const iniciativa = await obtenerDB().collection('initiatives').findOne({ _id: new ObjectId(req.params.id) });
+  if (!iniciativa || (iniciativa.visibility === 'Privada' && !esMiembro(iniciativa, req.usuario))) {
+    return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Iniciativa inexistente' } });
+  }
+  if (!esMiembro(iniciativa, req.usuario)) {
+    return res.status(403).json({ error: { code: 'FORBIDDEN', message: 'Solo el equipo puede consultar sus miembros' } });
+  }
+  const detalle = await representar(iniciativa, req.usuario);
+  res.json({ items: detalle.members });
+});
+
+router.delete('/initiatives/:id/members/:userId', requerirSesion, async (req, res) => {
+  if (!/^[a-f\d]{24}$/i.test(req.params.id) || !/^[a-f\d]{24}$/i.test(req.params.userId)) {
+    return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Identificador inválido' } });
+  }
+  const db = obtenerDB(), id = new ObjectId(req.params.id), userId = new ObjectId(req.params.userId);
+  await ejecutarTransaccion(async (sesion) => {
+    const coleccion = db.collection('initiatives');
+    const iniciativa = await coleccion.findOne({ _id: id }, { session: sesion });
+    if (!iniciativa) throw Object.assign(new Error('Iniciativa inexistente'), { status: 404 });
+    if (String(iniciativa.ownerId) !== String(req.usuario._id)) throw Object.assign(new Error('Solo el propietario puede retirar miembros'), { status: 403 });
+    if (String(iniciativa.ownerId) === String(userId)) throw Object.assign(new Error('No se puede retirar al propietario'), { status: 409 });
+    if (!(iniciativa.members || []).some((miembro) => String(miembro.userId) === String(userId))) {
+      throw Object.assign(new Error('Miembro inexistente'), { status: 404 });
+    }
+    await coleccion.updateOne({ _id: id }, { $pull: { members: { userId } }, $set: { updatedAt: new Date() } }, { session: sesion });
+  });
+  res.status(204).end();
+});
+
 export default router;
