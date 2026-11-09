@@ -38,8 +38,8 @@ function Encabezado() {
 
             {!cargando && usuario && (
               <NavLink to="/usuarios" className={({ isActive }) =>
-                  `nav-link ${isActive ? 'active' : ''}`
-                }
+                `nav-link ${isActive ? 'active' : ''}`
+              }
               >
                 Usuarios
               </NavLink>
@@ -58,19 +58,32 @@ function Encabezado() {
                     {usuario.fullName}
                   </span>
                   <NavLink to="/mi-perfil" className={({ isActive }) =>
-                      `nav-link ${isActive ? 'active' : ''}`
-                    }
+                    `nav-link ${isActive ? 'active' : ''}`
+                  }
                   >
                     Mi perfil
                   </NavLink>
+                  <NavLink to="/mis-solicitudes" className={({ isActive }) =>
+                    `nav-link ${isActive ? 'active' : ''}`
+                  }
+                  >
+                    Mis solicitudes
+                  </NavLink>
+                  <NavLink to="/proyectos" className={({ isActive }) =>
+                      `nav-link ${isActive ? 'active' : ''}`
+                    }
+                  >
+                    Mis proyectos
+                  </NavLink>
+
                   <button type="button" className="btn btn-outline-light btn-sm" onClick={manejarCerrarSesion}>
                     Cerrar sesión
                   </button>
                 </>
               ) : (
                 <NavLink to="/login" className={({ isActive }) =>
-                    `nav-link ${isActive ? 'active' : ''}`
-                  }
+                  `nav-link ${isActive ? 'active' : ''}`
+                }
                 >
                   Iniciar sesión
                 </NavLink>
