@@ -6,6 +6,7 @@ import { peticion } from '../servicios/api.js'
 function DetalleProyecto() {
   const { id } = useParams()
   const { usuario, cargando: cargandoSesion } = useAuth()
+  const idUsuario = usuario?.id
 
   const [proyecto, setProyecto] = useState(null)
   const [repositorio, setRepositorio] = useState(null)
@@ -16,10 +17,7 @@ function DetalleProyecto() {
   useEffect(() => {
     if (cargandoSesion) return
 
-    if (!usuario) {
-      setCargando(false)
-      return
-    }
+    if (!idUsuario) return
 
     let activo = true
 
@@ -69,9 +67,21 @@ function DetalleProyecto() {
               throw new Error('No fue posible consultar GitHub.')
             }
 
-            const datosGitHub = await respuesta.json()
+            let datosGitHub
+            try {
+              datosGitHub = await respuesta.json()
+            } catch {
+              throw new Error('GitHub devolvió una respuesta inválida.')
+            }
 
-            if (!datosGitHub.full_name || !datosGitHub.owner?.login) {
+            if (
+              typeof datosGitHub?.name !== 'string' ||
+              typeof datosGitHub.owner?.login !== 'string' ||
+              typeof datosGitHub.default_branch !== 'string' ||
+              typeof datosGitHub.updated_at !== 'string' ||
+              Number.isNaN(Date.parse(datosGitHub.updated_at)) ||
+              !Number.isInteger(datosGitHub.open_issues_count)
+            ) {
               throw new Error('GitHub devolvió información incompleta.')
             }
 
@@ -98,7 +108,7 @@ function DetalleProyecto() {
     return () => {
       activo = false
     }
-  }, [id, usuario?.id, cargandoSesion])
+  }, [id, idUsuario, cargandoSesion])
 
   function mostrarFecha(fecha) {
     return fecha
@@ -106,7 +116,7 @@ function DetalleProyecto() {
       : 'No especificada'
   }
 
-  if (cargando || cargandoSesion) {
+  if (cargandoSesion || (usuario && cargando)) {
     return <main className="container py-4">Cargando proyecto...</main>
   }
 

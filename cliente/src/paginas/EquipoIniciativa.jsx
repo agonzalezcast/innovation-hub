@@ -6,6 +6,7 @@ import { peticion } from '../servicios/api.js'
 function EquipoIniciativa() {
   const { id } = useParams()
   const { usuario, cargando: cargandoSesion } = useAuth()
+  const idUsuario = usuario?.id
 
   const [iniciativa, setIniciativa] = useState(null)
   const [miembros, setMiembros] = useState([])
@@ -17,10 +18,7 @@ function EquipoIniciativa() {
   useEffect(() => {
     if (cargandoSesion) return
 
-    if (!usuario) {
-      setCargando(false)
-      return
-    }
+    if (!idUsuario) return
 
     let activo = true
 
@@ -31,9 +29,9 @@ function EquipoIniciativa() {
       try {
         const datosIniciativa = await peticion(`/initiatives/${id}`)
 
-        const esPropietario = datosIniciativa.owner?.id === usuario.id
+        const esPropietario = datosIniciativa.owner?.id === idUsuario
         const esMiembro = (datosIniciativa.members || []).some(
-          (miembro) => miembro.user?.id === usuario.id
+          (miembro) => miembro.user?.id === idUsuario
         )
 
         if (!esPropietario && !esMiembro) {
@@ -61,7 +59,7 @@ function EquipoIniciativa() {
     return () => {
       activo = false
     }
-  }, [id, usuario?.id, cargandoSesion])
+  }, [id, idUsuario, cargandoSesion])
 
   async function eliminarMiembro(idUsuario) {
     const confirmar = window.confirm(
@@ -97,7 +95,7 @@ function EquipoIniciativa() {
       : 'No especificada'
   }
 
-  if (cargandoSesion || cargando) {
+  if (cargandoSesion || (usuario && cargando)) {
     return (
       <main className="container py-4">
         <p>Cargando equipo...</p>

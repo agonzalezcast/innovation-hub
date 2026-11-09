@@ -5,6 +5,7 @@ import { peticion } from '../servicios/api.js'
 
 function DirectorioUsuarios() {
   const { usuario, cargando } = useAuth()
+  const idUsuario = usuario?.id
 
   const [usuarios, setUsuarios] = useState([])
   const [competencias, setCompetencias] = useState([])
@@ -21,15 +22,18 @@ function DirectorioUsuarios() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!usuario) return
+    if (!idUsuario) return
 
+    let activo = true
     peticion('/skills')
-      .then((datos) => setCompetencias(datos.items))
-      .catch(() => setCompetencias([]))
-  }, [usuario?.id])
+      .then((datos) => { if (activo) setCompetencias(datos.items) })
+      .catch(() => { if (activo) setCompetencias([]) })
+    return () => { activo = false }
+  }, [idUsuario])
 
   useEffect(() => {
-    if (!usuario) return
+    if (!idUsuario) return
+    let activo = true
 
     async function cargarUsuarios() {
       setCargandoDatos(true)
@@ -48,18 +52,23 @@ function DirectorioUsuarios() {
 
       try {
         const datos = await peticion(`/users?${parametros}`)
-        setUsuarios(datos.items || [])
-        setTotalPaginas(datos.totalPages || 1)
+        if (activo) {
+          setUsuarios(datos.items || [])
+          setTotalPaginas(datos.totalPages || 1)
+        }
       } catch (err) {
-        setError(err.message)
-        setUsuarios([])
+        if (activo) {
+          setError(err.message)
+          setUsuarios([])
+        }
       } finally {
-        setCargandoDatos(false)
+        if (activo) setCargandoDatos(false)
       }
     }
 
     cargarUsuarios()
-  }, [usuario?.id, filtros, pagina])
+    return () => { activo = false }
+  }, [idUsuario, filtros, pagina])
 
   function manejarCambio(evento) {
     const { name, value } = evento.target

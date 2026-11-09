@@ -6,6 +6,7 @@ import FormularioPerfil from '../componentes/usuarios/FormularioPerfil.jsx'
 
 function MiPerfil() {
   const { usuario, cargando, setUsuario } = useAuth()
+  const idUsuario = usuario?.id
   const [perfil, setPerfil] = useState(null)
   const [competencias, setCompetencias] = useState([])
   const [cargandoPerfil, setCargandoPerfil] = useState(true)
@@ -16,7 +17,8 @@ function MiPerfil() {
   useEffect(() => {
     if (cargando) return
 
-    if (!usuario) return
+    if (!idUsuario) return
+    let activo = true
 
     async function cargarPerfil() {
       try {
@@ -25,17 +27,20 @@ function MiPerfil() {
           peticion('/skills')
         ])
 
-        setPerfil(datosUsuario)
-        setCompetencias(datosCompetencias.items)
+        if (activo) {
+          setPerfil(datosUsuario)
+          setCompetencias(datosCompetencias.items)
+        }
       } catch (err) {
-        setError(err.message)
+        if (activo) setError(err.message)
       } finally {
-        setCargandoPerfil(false)
+        if (activo) setCargandoPerfil(false)
       }
     }
 
     cargarPerfil()
-  }, [usuario?.id, cargando])
+    return () => { activo = false }
+  }, [idUsuario, cargando])
 
   async function guardarPerfil(datos) {
     setGuardando(true)

@@ -5,6 +5,7 @@ import { peticion } from '../servicios/api.js'
 
 function Proyectos() {
   const { usuario, cargando: cargandoSesion } = useAuth()
+  const idUsuario = usuario?.id
   const [proyectos, setProyectos] = useState([])
   const [pagina, setPagina] = useState(1)
   const [totalPaginas, setTotalPaginas] = useState(1)
@@ -14,10 +15,7 @@ function Proyectos() {
   useEffect(() => {
     if (cargandoSesion) return
 
-    if (!usuario) {
-      setCargando(false)
-      return
-    }
+    if (!idUsuario) return
 
     let activo = true
 
@@ -44,7 +42,7 @@ function Proyectos() {
     return () => {
       activo = false
     }
-  }, [usuario?.id, cargandoSesion, pagina])
+  }, [idUsuario, cargandoSesion, pagina])
 
   if (cargandoSesion) {
     return <main className="container py-4">Verificando sesión...</main>

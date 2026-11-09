@@ -6,13 +6,14 @@ import { peticion } from '../servicios/api.js'
 function PerfilPublico() {
   const { id } = useParams()
   const { usuario, cargando } = useAuth()
+  const idUsuario = usuario?.id
 
   const [perfil, setPerfil] = useState(null)
   const [cargandoPerfil, setCargandoPerfil] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!usuario) return
+    if (!idUsuario) return
 
     let activo = true
 
@@ -35,7 +36,7 @@ function PerfilPublico() {
     return () => {
       activo = false
     }
-  }, [id, usuario?.id])
+  }, [id, idUsuario])
 
   if (cargando) {
     return <main className="container py-5">Verificando sesión...</main>

@@ -6,6 +6,7 @@ import { peticion } from '../servicios/api.js'
 function SolicitudesRecibidas() {
   const { id } = useParams()
   const { usuario, cargando: cargandoSesion } = useAuth()
+  const idUsuario = usuario?.id
 
   const [iniciativa, setIniciativa] = useState(null)
   const [solicitudes, setSolicitudes] = useState([])
@@ -21,10 +22,7 @@ function SolicitudesRecibidas() {
   useEffect(() => {
     if (cargandoSesion) return
 
-    if (!usuario) {
-      setCargando(false)
-      return
-    }
+    if (!idUsuario) return
 
     let activo = true
 
@@ -36,7 +34,7 @@ function SolicitudesRecibidas() {
       try {
         const datosIniciativa = await peticion(`/initiatives/${id}`)
 
-        if (datosIniciativa.owner?.id !== usuario.id) {
+        if (datosIniciativa.owner?.id !== idUsuario) {
           throw new Error('Solo el propietario puede gestionar las solicitudes.')
         }
 
@@ -73,7 +71,7 @@ function SolicitudesRecibidas() {
     return () => {
       activo = false
     }
-  }, [id, usuario?.id, cargandoSesion, estado, pagina])
+  }, [id, idUsuario, cargandoSesion, estado, pagina])
 
   async function resolverSolicitud(solicitudId, accion) {
     const verbo = accion === 'accept' ? 'aceptar' : 'rechazar'

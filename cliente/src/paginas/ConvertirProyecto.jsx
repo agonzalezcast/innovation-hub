@@ -7,6 +7,7 @@ function ConvertirProyecto() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { usuario, cargando: cargandoSesion } = useAuth()
+  const idUsuario = usuario?.id
 
   const [iniciativa, setIniciativa] = useState(null)
   const [cargando, setCargando] = useState(true)
@@ -26,10 +27,7 @@ function ConvertirProyecto() {
   useEffect(() => {
     if (cargandoSesion) return
 
-    if (!usuario) {
-      setCargando(false)
-      return
-    }
+    if (!idUsuario) return
 
     let activo = true
 
@@ -37,7 +35,7 @@ function ConvertirProyecto() {
       try {
         const datos = await peticion(`/initiatives/${id}`)
 
-        if (datos.owner?.id !== usuario.id) {
+        if (datos.owner?.id !== idUsuario) {
           throw new Error('Solo el propietario puede convertir esta iniciativa.')
         }
 
@@ -71,7 +69,7 @@ function ConvertirProyecto() {
     return () => {
       activo = false
     }
-  }, [id, usuario?.id, cargandoSesion])
+  }, [id, idUsuario, cargandoSesion])
 
   function manejarCambio(evento) {
     const { name, value } = evento.target
@@ -122,7 +120,7 @@ function ConvertirProyecto() {
     }
   }
 
-  if (cargando || cargandoSesion) {
+  if (cargandoSesion || (usuario && cargando)) {
     return <main className="container py-4">Cargando iniciativa...</main>
   }
 
