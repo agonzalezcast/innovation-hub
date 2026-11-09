@@ -11,6 +11,7 @@ import Registro from './paginas/Registro.jsx'
 import MiPerfil from './paginas/MiPerfil.jsx'
 import DirectorioUsuarios from './paginas/DirectorioUsuarios.jsx'
 import PerfilPublico from './paginas/PerfilPublico.jsx'
+import MisSolicitudes from './paginas/MisSolicitudes.jsx'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/mi-perfil" element={<MiPerfil />} />
         <Route path="/usuarios" element={<DirectorioUsuarios />} />
         <Route path="/usuarios/:id" element={<PerfilPublico />} />
+        <Route path="/mis-solicitudes" element={<MisSolicitudes />} />
       </Routes>
 
       <Footer />
