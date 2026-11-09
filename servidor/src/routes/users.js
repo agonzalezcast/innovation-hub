@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ObjectId } from 'mongodb';
-import { obtenerDB } from '../config/db.js';
+import { ejecutarTransaccion, obtenerDB } from '../config/db.js';
 import { requerirSesion } from '../middlewares/autenticacion.js';
 import { usuarioPropio, usuarioPublico } from '../utils/usuario.js';
 
@@ -104,6 +104,26 @@ router.put('/users/me', requerirSesion, async (req, res) => {
   };
   await db.collection('users').updateOne({ _id: req.usuario._id }, { $set: cambios });
   res.json(await usuarioPropio({ ...req.usuario, ...cambios }));
+});
+
+router.patch('/users/me/deactivate', requerirSesion, async (req, res) => {
+  if (req.body?.confirm !== true || Object.keys(req.body).some((campo) => campo !== 'confirm')) {
+    return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Confirme la desactivación de la cuenta' } });
+  }
+
+  const db = obtenerDB();
+  await ejecutarTransaccion(async (sesion) => {
+    const iniciativa = await db.collection('initiatives').findOne({
+      ownerId: req.usuario._id, status: { $ne: 'Archivada' }
+    }, { session: sesion });
+    if (iniciativa) {
+      throw Object.assign(new Error('Archive sus iniciativas antes de desactivar la cuenta'), { status: 409 });
+    }
+    await db.collection('users').updateOne({ _id: req.usuario._id, active: true },
+      { $set: { active: false, updatedAt: new Date() } }, { session: sesion });
+    await db.collection('sessions').deleteMany({ userId: req.usuario._id }, { session: sesion });
+  });
+  res.status(204).end();
 });
 
 export default router;

@@ -69,7 +69,7 @@ router.get('/initiatives', sesionOpcional, async (req, res) => {
   if (skill) filtro.skills = new ObjectId(skill);
   if (q.trim()) {
     const patron = new RegExp(q.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-    filtro.$or = [{ title: patron }, { summary: patron }];
+    filtro.$or = [{ title: patron }, { summary: patron }, { tags: patron }];
   }
   const coleccion = obtenerDB().collection('initiatives');
   const pagina = Number(page), cantidad = Number(size);
