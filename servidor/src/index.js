@@ -1,2 +1,13 @@
-// index.js
-// Punto de entrada: conecta la base de datos y después levanta el servidor.
+import app from './app.js';
+import env from './config/env.js';
+import { conectarDB } from './config/db.js';
+
+try {
+  await conectarDB();
+  app.listen(env.port, () => {
+    console.log(`Servidor escuchando en el puerto ${env.port}`);
+  });
+} catch (error) {
+  console.error('No se pudo iniciar el servidor. Revisá la conexión a MongoDB.');
+  process.exitCode = 1;
+}
