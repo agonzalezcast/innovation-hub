@@ -24,7 +24,7 @@
 
 - Las rutas con `{id}` usan IDs opacos. ID mal formado: `400`; inexistente o no visible: `404`; existente pero operación prohibida para un usuario autenticado: `403`.
 
-- Una operación exitosa que devuelve JSON usa `200` (lectura/edición) o `201` (creación); una operación sin cuerpo usa `204` (sin JSON). `500` es error interno. Una dependencia externa fallida puede producir `502` o `503` (véase GitHub).
+- Una operación exitosa que devuelve JSON usa `200` (lectura/edición) o `201` (creación); una operación sin cuerpo usa `204` (sin JSON). `500` es error interno. Una dependencia externa fallida puede producir `502` o `503` cuando corresponda.
 
 ### 1.1 Paginación
 
@@ -34,15 +34,15 @@ Para endpoints paginados: `page` (entero desde 1; por defecto 1), `size` (entero
 
 {
 
-  "items": [],
+  "items": [],
 
-  "page": 1,
+  "page": 1,
 
-  "size": 12,
+  "size": 12,
 
-  "total": 0,
+  "total": 0,
 
-  "totalPages": 0
+  "totalPages": 0
 
 }
 
@@ -56,15 +56,15 @@ Para endpoints paginados: `page` (entero desde 1; por defecto 1), `size` (entero
 
 {
 
-  "error": {
+  "error": {
 
-    "code": "VALIDATION_ERROR",
+    "code": "VALIDATION_ERROR",
 
-    "message": "Los datos enviados no son válidos.",
+    "message": "Los datos enviados no son válidos.",
 
-    "details": { "title": "El título debe tener entre 5 y 80 caracteres." }
+    "details": { "title": "El título debe tener entre 5 y 80 caracteres." }
 
-  }
+  }
 
 }
 
@@ -102,23 +102,23 @@ Los nombres de competencias son datos del catálogo `skills`, no valores arbitra
 
 {
 
-  "id": "user-1",
+  "id": "user-1",
 
-  "fullName": "Ana Rodríguez Mora",
+  "fullName": "Ana Rodríguez Mora",
 
-  "memberType": "Estudiante",
+  "memberType": "Estudiante",
 
-  "career": "Ingeniería de Software",
+  "career": "Ingeniería de Software",
 
-  "description": "Me interesa el desarrollo web.",
+  "description": "Me interesa el desarrollo web.",
 
-  "skills": [{ "id": "skill-1", "name": "Programación" }],
+  "skills": [{ "id": "skill-1", "name": "Programación" }],
 
-  "interests": ["Educación"],
+  "interests": ["Educación"],
 
-  "availability": "Fines de semana",
+  "availability": "Fines de semana",
 
-  "portfolioUrl": "https\://github.com/ana"
+  "portfolioUrl": "https://github.com/ana"
 
 }
 
@@ -142,11 +142,11 @@ Las respuestas de lectura presentan competencias como **objetos** `{id,name}`; l
 
 {
 
-  "user": { "id": "user-1", "fullName": "Ana Rodríguez Mora" },
+  "user": { "id": "user-1", "fullName": "Ana Rodríguez Mora" },
 
-  "role": "Propietario",
+  "role": "Propietario",
 
-  "joinedAt": "2026-11-08T18:00:00.000Z"
+  "joinedAt": "2026-11-08T18:00:00.000Z"
 
 }
 
@@ -158,27 +158,27 @@ Las respuestas de lectura presentan competencias como **objetos** `{id,name}`; l
 
 {
 
-  "id": "initiative-1",
+  "id": "initiative-1",
 
-  "title": "Plataforma de tutorías",
+  "title": "Plataforma de tutorías",
 
-  "type": "Idea",
+  "type": "Idea",
 
-  "summary": "Conectar estudiantes con tutores voluntarios de la universidad.",
+  "summary": "Conectar estudiantes con tutores voluntarios de la universidad.",
 
-  "category": "Educación",
+  "category": "Educación",
 
-  "skills": [{ "id": "skill-1", "name": "Programación" }],
+  "skills": [{ "id": "skill-1", "name": "Programación" }],
 
-  "visibility": "Pública",
+  "visibility": "Pública",
 
-  "status": "Publicada",
+  "status": "Publicada",
 
-  "capacity": 5,
+  "capacity": 5,
 
-  "memberCount": 2,
+  "memberCount": 2,
 
-  "createdAt": "2026-11-08T18:00:00.000Z"
+  "createdAt": "2026-11-08T18:00:00.000Z"
 
 }
 
@@ -190,41 +190,41 @@ Las respuestas de lectura presentan competencias como **objetos** `{id,name}`; l
 
 {
 
-  "id": "initiative-1",
+  "id": "initiative-1",
 
-  "title": "Plataforma de tutorías",
+  "title": "Plataforma de tutorías",
 
-  "type": "Idea",
+  "type": "Idea",
 
-  "summary": "Conectar estudiantes con tutores voluntarios de la universidad.",
+  "summary": "Conectar estudiantes con tutores voluntarios de la universidad.",
 
-  "description": "Una plataforma para gestionar tutorías académicas y voluntariado.",
+  "description": "Una plataforma para gestionar tutorías académicas y voluntariado.",
 
-  "problem": "Dificultad para encontrar apoyo académico a tiempo.",
+  "problem": "Dificultad para encontrar apoyo académico a tiempo.",
 
-  "beneficiaries": "Estudiantes universitarios",
+  "beneficiaries": "Estudiantes universitarios",
 
-  "category": "Educación",
+  "category": "Educación",
 
-  "skills": [{ "id": "skill-1", "name": "Programación" }],
+  "skills": [{ "id": "skill-1", "name": "Programación" }],
 
-  "capacity": 5,
+  "capacity": 5,
 
-  "visibility": "Pública",
+  "visibility": "Pública",
 
-  "status": "Publicada",
+  "status": "Publicada",
 
-  "owner": { "id": "user-1", "fullName": "Ana Rodríguez Mora" },
+  "owner": { "id": "user-1", "fullName": "Ana Rodríguez Mora" },
 
-  "members": [{ "user": { "id": "user-1", "fullName": "Ana Rodríguez Mora" }, "role": "Propietario", "joinedAt": "2026-11-08T18:00:00.000Z" }],
+  "members": [{ "user": { "id": "user-1", "fullName": "Ana Rodríguez Mora" }, "role": "Propietario", "joinedAt": "2026-11-08T18:00:00.000Z" }],
 
-  "tags": ["educación", "tutorías"],
+  "tags": ["educación", "tutorías"],
 
-  "publishedAt": "2026-11-08T18:00:00.000Z",
+  "publishedAt": "2026-11-08T18:00:00.000Z",
 
-  "createdAt": "2026-11-08T18:00:00.000Z",
+  "createdAt": "2026-11-08T18:00:00.000Z",
 
-  "updatedAt": "2026-11-08T18:00:00.000Z"
+  "updatedAt": "2026-11-08T18:00:00.000Z"
 
 }
 
@@ -238,17 +238,17 @@ Campos opcionales `problem`, `beneficiaries`, `publishedAt`: se devuelven como `
 
 {
 
-  "id": "initiative-1",
+  "id": "initiative-1",
 
-  "title": "Plataforma de tutorías",
+  "title": "Plataforma de tutorías",
 
-  "type": "Idea",
+  "type": "Idea",
 
-  "summary": "Conectar estudiantes con tutores voluntarios de la universidad.",
+  "summary": "Conectar estudiantes con tutores voluntarios de la universidad.",
 
-  "category": "Educación",
+  "category": "Educación",
 
-  "skills": [{ "id": "skill-1", "name": "Programación" }]
+  "skills": [{ "id": "skill-1", "name": "Programación" }]
 
 }
 
@@ -282,23 +282,23 @@ Pública. Petición:
 
 {
 
-  "firstName": "Ana",
+  "firstName": "Ana",
 
-  "lastName": "Rodríguez",
+  "lastName": "Rodríguez",
 
-  "secondLastName": "Mora",
+  "secondLastName": "Mora",
 
-  "email": "ana@universidad.ac.cr",
+  "email": "ana@universidad.ac.cr",
 
-  "password": "ClaveSegura123",
+  "password": "ClaveSegura123",
 
-  "passwordConfirmation": "ClaveSegura123",
+  "passwordConfirmation": "ClaveSegura123",
 
-  "memberType": "Estudiante",
+  "memberType": "Estudiante",
 
-  "career": "Ingeniería de Software",
+  "career": "Ingeniería de Software",
 
-  "acceptTerms": true
+  "acceptTerms": true
 
 }
 
@@ -344,25 +344,25 @@ Protegida. Reemplaza los campos editables del perfil. Petición:
 
 {
 
-  "firstName": "Ana",
+  "firstName": "Ana",
 
-  "lastName": "Rodríguez",
+  "lastName": "Rodríguez",
 
-  "secondLastName": "Mora",
+  "secondLastName": "Mora",
 
-  "memberType": "Estudiante",
+  "memberType": "Estudiante",
 
-  "career": "Ingeniería de Software",
+  "career": "Ingeniería de Software",
 
-  "description": "Me interesa el desarrollo web.",
+  "description": "Me interesa el desarrollo web.",
 
-  "skillIds": ["skill-1"],
+  "skillIds": ["skill-1"],
 
-  "interests": ["Educación"],
+  "interests": ["Educación"],
 
-  "availability": "Fines de semana",
+  "availability": "Fines de semana",
 
-  "portfolioUrl": "https\://github.com/ana"
+  "portfolioUrl": "https://github.com/ana"
 
 }
 
@@ -372,7 +372,7 @@ Respuesta `200`: `UserSelf`. `email`, `id`, `active` y contraseña no se modific
 
 ### `PATCH /api/users/me/deactivate`
 
-Protegida. Petición: `{ "confirm": true }`. Respuesta `204`. Desactiva la cuenta sin borrar el historial relacionado e invalida sus sesiones. Errores: `400`, `401`, `409` (si una regla de negocio impide la operación), `500`.
+Protegida. Petición: `{ "confirm": true }`. Respuesta `204`. Desactiva la cuenta sin borrar el historial relacionado e invalida sus sesiones. El usuario debe archivar sus iniciativas propias antes de desactivar la cuenta. Errores: `400`, `401`, `409` (tiene iniciativas propias sin archivar), `500`.
 
 ## 6. Competencias
 
@@ -392,7 +392,7 @@ Errores: `400`, `500`. En Avance 2 se requiere principalmente consultar el catá
 
 ### `GET /api/initiatives?type=&category=&skill=&q=&page=&size=`
 
-Pública con visibilidad dependiente de sesión. `skill` recibe ID de competencia; `q` busca título o resumen. Respuesta `200`: objeto paginado, `items` de `InitiativeSummary` o `InitiativeRestricted` según permisos. Errores: `400`, `500`.
+Pública con visibilidad dependiente de sesión. `skill` recibe ID de competencia; `q` busca título, resumen o etiquetas. Respuesta `200`: objeto paginado, `items` de `InitiativeSummary` o `InitiativeRestricted` según permisos. Errores: `400`, `500`.
 
 ### `GET /api/initiatives/{id}`
 
@@ -410,27 +410,27 @@ Protegida. Petición:
 
 {
 
-  "title": "Plataforma de tutorías",
+  "title": "Plataforma de tutorías",
 
-  "type": "Idea",
+  "type": "Idea",
 
-  "summary": "Conectar estudiantes con tutores voluntarios de la universidad.",
+  "summary": "Conectar estudiantes con tutores voluntarios de la universidad.",
 
-  "description": "Una plataforma para gestionar tutorías académicas y voluntariado.",
+  "description": "Una plataforma para gestionar tutorías académicas y voluntariado.",
 
-  "problem": "Dificultad para encontrar apoyo académico a tiempo.",
+  "problem": "Dificultad para encontrar apoyo académico a tiempo.",
 
-  "beneficiaries": "Estudiantes universitarios",
+  "beneficiaries": "Estudiantes universitarios",
 
-  "category": "Educación",
+  "category": "Educación",
 
-  "skillIds": ["skill-1"],
+  "skillIds": ["skill-1"],
 
-  "capacity": 5,
+  "capacity": 5,
 
-  "visibility": "Pública",
+  "visibility": "Pública",
 
-  "tags": ["educación", "tutorías"]
+  "tags": ["educación", "tutorías"]
 
 }
 
@@ -454,27 +454,27 @@ Formato de lectura `ParticipationRequest`:
 
 {
 
-  "id": "request-1",
+  "id": "request-1",
 
-  "initiative": { "id": "initiative-1", "title": "Plataforma de tutorías" },
+  "initiative": { "id": "initiative-1", "title": "Plataforma de tutorías" },
 
-  "requester": { "id": "user-2", "fullName": "Luis Pérez" },
+  "requester": { "id": "user-2", "fullName": "Luis Pérez" },
 
-  "message": "Me interesa participar y puedo contribuir con el desarrollo frontend.",
+  "message": "Me interesa participar y puedo contribuir con el desarrollo frontend.",
 
-  "mainSkill": { "id": "skill-1", "name": "Programación" },
+  "mainSkill": { "id": "skill-1", "name": "Programación" },
 
-  "role": "Desarrollador frontend",
+  "role": "Desarrollador frontend",
 
-  "availability": "Fines de semana",
+  "availability": "Fines de semana",
 
-  "status": "Pendiente",
+  "status": "Pendiente",
 
-  "createdAt": "2026-11-08T18:00:00.000Z",
+  "createdAt": "2026-11-08T18:00:00.000Z",
 
-  "updatedAt": "2026-11-08T18:00:00.000Z",
+  "updatedAt": "2026-11-08T18:00:00.000Z",
 
-  "resolvedAt": null
+  "resolvedAt": null
 
 }
 
@@ -488,15 +488,15 @@ Protegida. Petición:
 
 {
 
-  "initiativeId": "initiative-1",
+  "initiativeId": "initiative-1",
 
-  "message": "Me interesa participar y puedo contribuir con el desarrollo frontend.",
+  "message": "Me interesa participar y puedo contribuir con el desarrollo frontend.",
 
-  "mainSkillId": "skill-1",
+  "mainSkillId": "skill-1",
 
-  "role": "Desarrollador frontend",
+  "role": "Desarrollador frontend",
 
-  "availability": "Fines de semana"
+  "availability": "Fines de semana"
 
 }
 
@@ -550,33 +550,33 @@ Protegida; solo propietario. Sin cuerpo. No se permite eliminar al propietario; 
 
 {
 
-  "id": "project-1",
+  "id": "project-1",
 
-  "initiative": { "id": "initiative-1", "title": "Plataforma de tutorías" },
+  "initiative": { "id": "initiative-1", "title": "Plataforma de tutorías" },
 
-  "name": "Plataforma de tutorías",
+  "name": "Plataforma de tutorías",
 
-  "objective": "Facilitar el acceso a tutorías académicas.",
+  "objective": "Facilitar el acceso a tutorías académicas.",
 
-  "description": "Sistema de coordinación de tutorías universitarias.",
+  "description": "Sistema de coordinación de tutorías universitarias.",
 
-  "technologies": ["React", "Node.js"],
+  "technologies": ["React", "Node.js"],
 
-  "startDate": "2026-11-15",
+  "startDate": "2026-11-15",
 
-  "estimatedEndDate": null,
+  "estimatedEndDate": null,
 
-  "status": "Planificación",
+  "status": "Planificación",
 
-  "repositoryUrl": "https\://github.com/ejemplo/tutorias",
+  "repositoryUrl": "https://github.com/ejemplo/tutorias",
 
-  "owner": { "id": "user-1", "fullName": "Ana Rodríguez Mora" },
+  "owner": { "id": "user-1", "fullName": "Ana Rodríguez Mora" },
 
-  "members": [],
+  "members": [],
 
-  "createdAt": "2026-11-08T18:00:00.000Z",
+  "createdAt": "2026-11-08T18:00:00.000Z",
 
-  "updatedAt": "2026-11-08T18:00:00.000Z"
+  "updatedAt": "2026-11-08T18:00:00.000Z"
 
 }
 
@@ -592,19 +592,19 @@ Protegida; solo propietario. Petición:
 
 {
 
-  "name": "Plataforma de tutorías",
+  "name": "Plataforma de tutorías",
 
-  "objective": "Facilitar el acceso a tutorías académicas.",
+  "objective": "Facilitar el acceso a tutorías académicas.",
 
-  "description": "Sistema de coordinación de tutorías universitarias.",
+  "description": "Sistema de coordinación de tutorías universitarias.",
 
-  "technologies": ["React", "Node.js"],
+  "technologies": ["React", "Node.js"],
 
-  "startDate": "2026-11-15",
+  "startDate": "2026-11-15",
 
-  "estimatedEndDate": null,
+  "estimatedEndDate": null,
 
-  "repositoryUrl": "https\://github.com/ejemplo/tutorias"
+  "repositoryUrl": "https://github.com/ejemplo/tutorias"
 
 }
 
@@ -620,33 +620,11 @@ Protegida. Lista únicamente proyectos accesibles al usuario autenticado (propie
 
 Protegida. Solo propietario o miembro aceptado. Respuesta `200`: `Project`. Errores: `400`, `401`, `403`, `404`, `500`.
 
-### `GET /api/projects/{id}/github`
+### Información del repositorio GitHub — Avance 2
 
-Protegida. Solo propietario o miembro aceptado. El servidor consulta el repositorio público indicado por `repositoryUrl` y normaliza la respuesta de GitHub. Respuesta `200`:
+El cliente usa `repositoryUrl` del proyecto para consultar directamente la API pública de GitHub. Muestra nombre, propietario, descripción, lenguaje principal, rama principal, fecha de última actualización y cantidad de asuntos abiertos. Maneja repositorio inexistente o privado, respuesta inválida, límite de solicitudes y servicio no disponible. GitHub puede responder de la misma manera para un repositorio privado y uno inexistente.
 
-```json
-
-{
-
-  "name": "tutorias",
-
-  "owner": "ejemplo",
-
-  "description": "Repositorio del proyecto",
-
-  "language": "JavaScript",
-
-  "defaultBranch": "main",
-
-  "updatedAt": "2026-11-08T18:00:00.000Z",
-
-  "openIssues": 3
-
-}
-
-```
-
-Si no hay URL configurada o el proyecto no existe: `404`; URL inválida: `400`; sin permisos: `401`/`403`; repositorio externo inexistente: `404`; GitHub no disponible o respuesta inválida: `502`/`503`, con el mismo formato uniforme de errores. No se exponen credenciales de GitHub.
+La consulta a GitHub no forma parte de las rutas de la API propia en este avance.
 
 ### `PUT /api/projects/{id}` — Entrega final
 
@@ -673,7 +651,7 @@ Protegida; solo propietario de la iniciativa de origen. Sin cuerpo. Se archiva e
 
 **Filtros de proyectos reservados para la entrega final:** `q` busca por nombre y descripción; `status` acepta exclusivamente los valores controlados de `project.status`. Se filtra únicamente entre proyectos accesibles al usuario autenticado, antes de paginar. Respuesta `200`: formato paginado estándar con `items` de `Project`. Errores: `400`, `401`, `500`.
 
-**Alcance por entrega:** en el Avance 2 se implementan conversión, listado y consulta de proyectos, junto con la consulta del repositorio GitHub. Los parámetros `q` y `status` del listado, así como `PUT /api/projects/{id}` y `DELETE /api/projects/{id}`, quedan definidos en este contrato para implementarse en la entrega final. No son obligatorios en el Avance 2.
+**Alcance por entrega:** en el Avance 2 se implementan conversión, listado y consulta de proyectos, y la consulta del repositorio GitHub desde el cliente. Los parámetros `q` y `status` del listado, así como `PUT /api/projects/{id}` y `DELETE /api/projects/{id}`, quedan definidos en este contrato para implementarse en la entrega final. No son obligatorios en el Avance 2.
 
 ## 11. Matriz de pruebas mínimas
 
