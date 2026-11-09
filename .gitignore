@@ -15,3 +15,6 @@ Thumbs.db
 # secretos: los vas a necesitar desde el Avance 2
 .env
 .env.local
+
+# configuración local del servidor
+servidor/dev.env
