@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import env from './config/env.js';
+import skills from './routes/skills.js';
 import { manejarError, rutaNoEncontrada } from './middlewares/errores.js';
 
 const app = express();
@@ -15,6 +16,8 @@ app.use(express.json({ limit: '100kb' }));
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
+
+app.use('/api', skills);
 
 app.use(rutaNoEncontrada);
 app.use(manejarError);
