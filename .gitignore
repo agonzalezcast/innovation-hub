@@ -18,3 +18,7 @@ Thumbs.db
 
 # configuración local del servidor
 servidor/dev.env
+
+# entorno local de datos de prueba
+servidor/datos-prueba/.venv/
+servidor/datos-prueba/__pycache__/
