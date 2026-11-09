@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
+import { randomBytes } from 'node:crypto';
 import { obtenerDB } from '../config/db.js';
+import { hashToken, requerirSesion } from '../middlewares/autenticacion.js';
+import { usuarioPropio } from '../utils/usuario.js';
 
 const router = Router();
 
@@ -43,21 +46,40 @@ router.post('/auth/register', async (req, res) => {
   };
 
   const resultado = await obtenerDB().collection('users').insertOne(usuario);
-  res.status(201).json({
-    id: String(resultado.insertedId),
-    fullName: [usuario.firstName, usuario.lastName, usuario.secondLastName].filter(Boolean).join(' '),
-    memberType: usuario.memberType,
-    career: usuario.career,
-    description: usuario.description,
-    skills: usuario.skills,
-    interests: usuario.interests,
-    availability: usuario.availability,
-    portfolioUrl: usuario.portfolioUrl,
-    email: usuario.email,
-    active: usuario.active,
-    createdAt: usuario.createdAt,
-    updatedAt: usuario.updatedAt
+  usuario._id = resultado.insertedId;
+  res.status(201).json(await usuarioPropio(usuario));
+});
+
+router.post('/auth/login', async (req, res) => {
+  const { email, password } = req.body || {};
+  if (!texto(email, 3, 254) || typeof password !== 'string' ||
+      password.length < 1 || Buffer.byteLength(password, 'utf8') > 72) {
+    return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Los datos enviados no son válidos' } });
+  }
+
+  const db = obtenerDB();
+  const usuario = await db.collection('users').findOne({ email: email.trim().toLowerCase() });
+  if (!usuario || !usuario.active || !(await bcrypt.compare(password, usuario.passwordHash))) {
+    return res.status(401).json({ error: { code: 'UNAUTHENTICATED', message: 'Credenciales incorrectas' } });
+  }
+
+  const token = randomBytes(32).toString('hex');
+  await db.collection('sessions').insertOne({
+    tokenHash: hashToken(token),
+    userId: usuario._id,
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   });
+  res.json({ token, user: await usuarioPropio(usuario) });
+});
+
+router.get('/auth/me', requerirSesion, async (req, res) => {
+  res.json(await usuarioPropio(req.usuario));
+});
+
+router.post('/auth/logout', requerirSesion, async (req, res) => {
+  await obtenerDB().collection('sessions').deleteOne({ _id: req.sesion._id });
+  res.status(204).end();
+
 });
 
 export default router;
