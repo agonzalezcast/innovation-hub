@@ -18,7 +18,7 @@ export function manejarError(err, req, res, next) {
   res.status(status).json({
     error: {
       code: codes[status] || 'INTERNAL_ERROR',
-      message: status >= 500 ? 'Ocurrió un error interno' : (err.code === 11000 ? 'El correo ya está registrado' : err.message)
+      message: status >= 500 ? 'Ocurrió un error interno' : (err.code === 11000 ? 'Ya existe un registro con esos datos' : err.message)
     }
   });
 }

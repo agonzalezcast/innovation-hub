@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { ObjectId } from 'mongodb';
 import { obtenerDB } from '../config/db.js';
 import { requerirSesion } from '../middlewares/autenticacion.js';
+import { validarIniciativa } from '../services/validarIniciativa.js';
 
 const router = Router();
 
@@ -92,6 +93,51 @@ router.get('/initiatives/:id', sesionOpcional, async (req, res) => {
     return res.status(401).json({ error: { code: 'UNAUTHENTICATED', message: 'Inicie sesión' } });
   }
   res.json(await representar(iniciativa, req.usuario));
+});
+
+router.post('/initiatives', requerirSesion, async (req, res) => {
+  const datos = await validarIniciativa(req.body || {});
+  const fecha = new Date();
+  const iniciativa = {
+    ...datos, ownerId: req.usuario._id,
+    members: [{ userId: req.usuario._id, role: 'Propietario', joinedAt: fecha }],
+    status: 'Publicada', publishedAt: fecha, createdAt: fecha, updatedAt: fecha
+  };
+  const resultado = await obtenerDB().collection('initiatives').insertOne(iniciativa);
+  iniciativa._id = resultado.insertedId;
+  res.status(201).json(await representar(iniciativa, req.usuario));
+});
+
+router.put('/initiatives/:id', requerirSesion, async (req, res) => {
+  if (!/^[a-f\d]{24}$/i.test(req.params.id)) {
+    return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Identificador inválido' } });
+  }
+  const coleccion = obtenerDB().collection('initiatives');
+  const iniciativa = await coleccion.findOne({ _id: new ObjectId(req.params.id) });
+  if (!iniciativa) {
+    return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Iniciativa inexistente' } });
+  }
+  if (String(iniciativa.ownerId) !== String(req.usuario._id)) {
+    return res.status(403).json({ error: { code: 'FORBIDDEN', message: 'Solo el propietario puede modificar la iniciativa' } });
+  }
+  if (['Archivada', 'Convertida en proyecto'].includes(iniciativa.status)) {
+    return res.status(409).json({ error: { code: 'CONFLICT', message: 'La iniciativa no se puede modificar' } });
+  }
+  const datos = await validarIniciativa(req.body || {});
+  if (datos.capacity < (iniciativa.members || []).length) {
+    return res.status(409).json({ error: { code: 'CONFLICT', message: 'La capacidad es menor al equipo actual' } });
+  }
+  const cambios = { ...datos, updatedAt: new Date() };
+  const resultado = await coleccion.updateOne({
+    _id: iniciativa._id, ownerId: req.usuario._id,
+    status: { $nin: ['Archivada', 'Convertida en proyecto'] },
+    $expr: { $lte: [{ $size: { $ifNull: ['$members', []] } }, datos.capacity] }
+  }, { $set: cambios });
+  if (!resultado.matchedCount) {
+    return res.status(409).json({ error: { code: 'CONFLICT', message: 'La iniciativa cambió y no se pudo actualizar' } });
+  }
+  const actualizada = await coleccion.findOne({ _id: iniciativa._id });
+  res.json(await representar(actualizada, req.usuario));
 });
 
 export default router;
