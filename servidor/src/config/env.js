@@ -1,12 +1,12 @@
 const env = {
   port: Number(process.env.PORT || 3000),
-  mongoUri: process.env.MONGODB_URI,
+  mongoUri: process.env.MONGODB_URI || process.env.mongodbstring,
   dbName: process.env.DB_NAME || 'innovation-hub',
   clientOrigin: process.env.CLIENT_ORIGIN || 'http://localhost:5173'
 };
 
 if (!env.mongoUri) {
-  throw new Error('Falta configurar MONGODB_URI');
+  throw new Error('Falta configurar MONGODB_URI o mongodbstring');
 }
 
 if (!Number.isInteger(env.port) || env.port < 1 || env.port > 65535) {

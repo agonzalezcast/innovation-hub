@@ -1,3 +1,4 @@
+import { setServers } from 'node:dns';
 import { MongoClient } from 'mongodb';
 import env from './env.js';
 
@@ -5,6 +6,13 @@ const client = new MongoClient(env.mongoUri);
 let db;
 
 export async function conectarDB() {
+  if (process.env.MONGODB_DNS_SERVERS) {
+    const servidores = process.env.MONGODB_DNS_SERVERS.split(',')
+      .map((servidor) => servidor.trim())
+      .filter(Boolean);
+    setServers(servidores);
+  }
+
   await client.connect();
   db = client.db(env.dbName);
   return db;
