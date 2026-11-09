@@ -15,6 +15,7 @@ export async function conectarDB() {
 
   await client.connect();
   db = client.db(env.dbName);
+  await db.collection('users').createIndex({ email: 1 }, { unique: true });
   return db;
 }
 
