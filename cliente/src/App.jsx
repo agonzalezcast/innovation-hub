@@ -12,6 +12,7 @@ import MiPerfil from './paginas/MiPerfil.jsx'
 import DirectorioUsuarios from './paginas/DirectorioUsuarios.jsx'
 import PerfilPublico from './paginas/PerfilPublico.jsx'
 import MisSolicitudes from './paginas/MisSolicitudes.jsx'
+import SolicitudesRecibidas from './paginas/SolicitudesRecibidas.jsx'
 
 function App() {
   return (
@@ -29,8 +30,9 @@ function App() {
         <Route path="/usuarios" element={<DirectorioUsuarios />} />
         <Route path="/usuarios/:id" element={<PerfilPublico />} />
         <Route path="/mis-solicitudes" element={<MisSolicitudes />} />
+        <Route path="/iniciativas/:id/solicitudes" element={<SolicitudesRecibidas />}/>
       </Routes>
-
+      
       <Footer />
     </>
   )

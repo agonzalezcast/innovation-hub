@@ -250,6 +250,17 @@ function DetalleIniciativa() {
               )}
             </section>
 
+            {esPropietario && (
+              <section className="mb-4">
+                <Link
+                  to={`/iniciativas/${iniciativa.id}/solicitudes`}
+                  className="btn btn-primary"
+                >
+                  Gestionar solicitudes recibidas
+                </Link>
+              </section>
+            )}
+
             {puedeSolicitar && (
               <section className="mb-4">
                 <FormularioSolicitud iniciativaId={iniciativa.id} />
