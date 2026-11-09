@@ -1,8 +1,7 @@
 
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contextos/AuthContext.jsx'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 function IniciarSesion() {
     const [email, setEmail] = useState('')
@@ -12,6 +11,8 @@ function IniciarSesion() {
     const { iniciarSesion } = useAuth()
     const navigate = useNavigate()
     const [enviando, setEnviando] = useState(false)
+
+    const location = useLocation()
 
     async function manejarSubmit(evento) {
         evento.preventDefault()
@@ -49,6 +50,12 @@ function IniciarSesion() {
                             {mensaje && (
                                 <div className="alert alert-danger" role="alert">
                                     {mensaje}
+                                </div>
+                            )}
+
+                            {location.state?.mensaje && (
+                                <div className="alert alert-success" role="status">
+                                    {location.state.mensaje}
                                 </div>
                             )}
 

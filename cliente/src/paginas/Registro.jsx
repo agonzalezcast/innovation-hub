@@ -1,6 +1,8 @@
 
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { peticion } from '../servicios/api.js'
 
 function Registro() {
   const [formulario, setFormulario] = useState({
@@ -17,6 +19,9 @@ function Registro() {
 
   const [errores, setErrores] = useState({})
   const [mensaje, setMensaje] = useState('')
+
+  const navigate = useNavigate()
+  const [enviando, setEnviando] = useState(false)
 
   function manejarCambio(evento) {
     const { name, value, type, checked } = evento.target
@@ -70,7 +75,7 @@ function Registro() {
     return nuevosErrores
   }
 
-  function manejarSubmit(evento) {
+  async function manejarSubmit(evento) {
     evento.preventDefault()
     setMensaje('')
 
@@ -81,7 +86,34 @@ function Registro() {
       return
     }
 
-    setMensaje('Formulario válido. Pendiente de conectar con la API.')
+    setEnviando(true)
+
+    try {
+      await peticion('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          firstName: formulario.firstName.trim(),
+          lastName: formulario.lastName.trim(),
+          secondLastName: formulario.secondLastName.trim(),
+          email: formulario.email.trim(),
+          password: formulario.password,
+          passwordConfirmation: formulario.passwordConfirmation,
+          memberType: formulario.memberType,
+          career: formulario.career.trim(),
+          acceptTerms: formulario.acceptTerms
+        })
+      })
+
+      navigate('/login', {
+        state: {
+          mensaje: 'Cuenta creada correctamente. Ya puede iniciar sesión.'
+        }
+      })
+    } catch (err) {
+      setMensaje(err.message)
+    } finally {
+      setEnviando(false)
+    }
   }
 
   return (
@@ -97,7 +129,7 @@ function Registro() {
               </p>
 
               {mensaje && (
-                <div className="alert alert-info" role="status">
+                <div className="alert alert-danger" role="alert">
                   {mensaje}
                 </div>
               )}
@@ -263,8 +295,8 @@ function Registro() {
                   </div>
                 </div>
 
-                <button type="submit" className="btn btn-primary w-100 mt-4">
-                  Crear cuenta
+                <button type="submit" className="btn btn-primary w-100 mt-4" disabled={enviando}>
+                  {enviando ? 'Creando cuenta...' : 'Crear cuenta'}
                 </button>
               </form>
 
