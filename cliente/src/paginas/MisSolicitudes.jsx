@@ -5,6 +5,7 @@ import { peticion } from '../servicios/api.js'
 
 function MisSolicitudes() {
   const { usuario, cargando: cargandoSesion } = useAuth()
+  const idUsuario = usuario?.id
 
   const [solicitudes, setSolicitudes] = useState([])
   const [estado, setEstado] = useState('')
@@ -18,11 +19,7 @@ function MisSolicitudes() {
   useEffect(() => {
     if (cargandoSesion) return
 
-    if (!usuario) {
-      setSolicitudes([])
-      setCargando(false)
-      return
-    }
+    if (!idUsuario) return
 
     let activo = true
 
@@ -61,7 +58,7 @@ function MisSolicitudes() {
     return () => {
       activo = false
     }
-  }, [usuario?.id, cargandoSesion, estado, pagina])
+  }, [idUsuario, cargandoSesion, estado, pagina])
 
   async function cancelarSolicitud(id) {
     const confirmar = window.confirm(
@@ -197,7 +194,7 @@ function MisSolicitudes() {
 
                     <p>
                       <strong>Competencia principal:</strong>{' '}
-                      {solicitud.mainSkill.name}
+                      {solicitud.mainSkill?.name || 'No disponible'}
                     </p>
 
                     <p>
@@ -221,6 +218,9 @@ function MisSolicitudes() {
                       Ver iniciativa
                     </Link>
 
+                    {solicitud.status === 'Pendiente' && (
+                      <Link to={`/solicitudes/${solicitud.id}/editar`} className="btn btn-outline-primary me-2">Modificar</Link>
+                    )}
                     {solicitud.status === 'Pendiente' && (
                       <button
                         type="button"

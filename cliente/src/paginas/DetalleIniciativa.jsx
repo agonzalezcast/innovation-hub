@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../contextos/AuthContext.jsx'
 import { peticion } from '../servicios/api.js'
 import FormularioSolicitud from '../componentes/solicitudes/FormularioSolicitud.jsx'
 
 function DetalleIniciativa() {
   const { id } = useParams()
+  const navigate = useNavigate()
+  const [errorAccion, setErrorAccion] = useState('')
   const { usuario, cargando: cargandoSesion } = useAuth()
 
   const [iniciativa, setIniciativa] = useState(null)
@@ -83,11 +85,21 @@ function DetalleIniciativa() {
 
   const puedeSolicitar =
     usuario &&
-    !detalleRestringido &&
     !esPropietario &&
     !esMiembro &&
-    espaciosDisponibles > 0 &&
-    ['Publicada', 'En formación de equipo'].includes(iniciativa.status)
+    (detalleRestringido || (espaciosDisponibles > 0 &&
+      ['Publicada', 'En formación de equipo'].includes(iniciativa.status)))
+
+  async function eliminarIniciativa() {
+    if (!window.confirm('¿Desea eliminar o archivar esta iniciativa?')) return
+    setErrorAccion('')
+    try {
+      await peticion(`/initiatives/${id}`, { method: 'DELETE' })
+      navigate('/catalogo')
+    } catch (err) {
+      setErrorAccion(err.message)
+    }
+  }
 
   function mostrarFecha(fecha) {
     return fecha
@@ -250,6 +262,15 @@ function DetalleIniciativa() {
               )}
             </section>
 
+            {errorAccion && <div className="alert alert-danger" role="alert">{errorAccion}</div>}
+            {esPropietario && iniciativa.status !== 'Archivada' && (
+              <div className="mb-4 d-flex gap-2">
+                {iniciativa.status !== 'Convertida en proyecto' &&
+                  <Link to={`/iniciativas/${id}/editar`} className="btn btn-outline-primary">Modificar iniciativa</Link>}
+                <button type="button" className="btn btn-outline-danger" onClick={eliminarIniciativa}>Eliminar o archivar</button>
+              </div>
+            )}
+
             {(esPropietario || esMiembro) && (
               <section className="mb-4 d-flex flex-wrap gap-2">
                 <Link
@@ -294,6 +315,7 @@ function DetalleIniciativa() {
           </>
         )}
       </article>
+      {puedeSolicitar && <FormularioSolicitud iniciativaId={iniciativa.id} competencias={iniciativa.skills || []} />}
     </main>
   )
 }

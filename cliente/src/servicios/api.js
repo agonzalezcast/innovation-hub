@@ -1,6 +1,7 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const API_URL = import.meta.env.VITE_API_URL
 
 export async function peticion(ruta, opciones = {}) {
+  if (!API_URL) throw new Error('Configure VITE_API_URL para conectar con el servidor.')
   const token = sessionStorage.getItem('token')
 
   let respuesta

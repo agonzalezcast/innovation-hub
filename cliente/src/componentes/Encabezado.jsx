@@ -57,6 +57,11 @@ function Encabezado() {
                   <span className="navbar-text">
                     {usuario.fullName}
                   </span>
+                  <NavLink to="/mis-iniciativas" className={({ isActive }) =>
+                    `nav-link ${isActive ? 'active' : ''}`
+                  }>
+                    Mis iniciativas
+                  </NavLink>
                   <NavLink to="/mi-perfil" className={({ isActive }) =>
                     `nav-link ${isActive ? 'active' : ''}`
                   }

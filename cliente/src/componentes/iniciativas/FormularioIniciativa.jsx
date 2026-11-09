@@ -14,23 +14,23 @@ const categorias = [
   'Otro'
 ]
 
-function FormularioIniciativa() {
+function FormularioIniciativa({ iniciativa = null }) {
   const navigate = useNavigate()
   const { usuario, cargando } = useAuth()
 
   const [competencias, setCompetencias] = useState([])
   const [formulario, setFormulario] = useState({
-    title: '',
-    type: 'Idea',
-    summary: '',
-    description: '',
-    problem: '',
-    beneficiaries: '',
-    category: '',
-    skillIds: [],
-    capacity: 1,
-    visibility: 'Pública',
-    tags: ''
+    title: iniciativa?.title || '',
+    type: iniciativa?.type || 'Idea',
+    summary: iniciativa?.summary || '',
+    description: iniciativa?.description || '',
+    problem: iniciativa?.problem || '',
+    beneficiaries: iniciativa?.beneficiaries || '',
+    category: iniciativa?.category || '',
+    skillIds: iniciativa?.skills?.map((skill) => skill.id) || [],
+    capacity: iniciativa?.capacity || 1,
+    visibility: iniciativa?.visibility || 'Pública',
+    tags: iniciativa?.tags?.join(', ') || ''
   })
 
   const [enviando, setEnviando] = useState(false)
@@ -105,12 +105,12 @@ function FormularioIniciativa() {
     }
 
     try {
-      const iniciativa = await peticion('/initiatives', {
-        method: 'POST',
+      const guardada = await peticion(iniciativa ? `/initiatives/${iniciativa.id}` : '/initiatives', {
+        method: iniciativa ? 'PUT' : 'POST',
         body: JSON.stringify(datos)
       })
 
-      navigate(`/iniciativas/${iniciativa.id}`)
+      navigate(`/iniciativas/${guardada.id}`)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -336,7 +336,7 @@ function FormularioIniciativa() {
         className="btn btn-primary"
         disabled={enviando}
       >
-        {enviando ? 'Publicando...' : 'Publicar iniciativa'}
+        {enviando ? 'Guardando...' : iniciativa ? 'Guardar cambios' : 'Publicar iniciativa'}
       </button>
     </form>
   )

@@ -123,7 +123,7 @@ function Inicio() {
                             <h3 className="h4">Cómo publicar una iniciativa</h3>
 
                             <ol>
-                                <li>Con su cuenta de usuario registrado, ingrese a <a href="paginas/publicar-iniciativa.html">Publicar iniciativa</a>.</li>
+                                <li>Con su cuenta de usuario registrado, ingrese a <Link to="/publicar">Publicar iniciativa</Link>.</li>
                                 <li>Complete los datos obligatorios: título, tipo, resumen, descripción y categoría.</li>
                                 <li>Describa el problema identificado, la población beneficiada, las competencias requeridas, la cantidad estimada de integrantes y las etiquetas.</li>
                                 <li>Elija el nivel de visibilidad, también obligatorio: pública, institucional, restringida o privada.</li>
