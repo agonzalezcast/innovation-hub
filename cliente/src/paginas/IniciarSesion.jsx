@@ -47,7 +47,7 @@ function IniciarSesion() {
                             </p>
 
                             {mensaje && (
-                                <div className="alert alert-info" role="status">
+                                <div className="alert alert-danger" role="alert">
                                     {mensaje}
                                 </div>
                             )}
