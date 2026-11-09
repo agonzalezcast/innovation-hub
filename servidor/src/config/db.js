@@ -16,9 +16,20 @@ export async function conectarDB() {
   await client.connect();
   db = client.db(env.dbName);
   await db.collection('users').createIndex({ email: 1 }, { unique: true });
-  await db.collection('initiatives').createIndex({ titleKey: 1 }, {
-    unique: true, partialFilterExpression: { titleKey: { $type: 'string' } }
-  });
+  const iniciativas = db.collection('initiatives');
+  try {
+    await iniciativas.createIndex({ titleKey: 1 }, {
+      unique: true, partialFilterExpression: { titleKey: { $type: 'string' } }
+    });
+  } catch (error) {
+    if (error.code !== 86) throw error;
+    const indices = await iniciativas.listIndexes().toArray();
+    const indiceCompatible = indices.some((indice) =>
+      indice.key?.titleKey === 1 && Object.keys(indice.key).length === 1 &&
+      indice.unique && !indice.partialFilterExpression && !indice.sparse && !indice.collation
+    );
+    if (!indiceCompatible) throw error;
+  }
   await db.collection('requests').createIndex(
     { initiativeId: 1, requesterId: 1, status: 1 },
     { unique: true, partialFilterExpression: { status: 'Pendiente' } }
