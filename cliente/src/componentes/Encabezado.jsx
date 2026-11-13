@@ -6,6 +6,10 @@ function Encabezado() {
   const { usuario, cargando, cerrarSesion } = useAuth()
   const navigate = useNavigate()
 
+  function cerrarMenu(event) {
+    event.currentTarget.closest('details').open = false
+  }
+
   async function manejarCerrarSesion() {
     try {
       await cerrarSesion()
@@ -18,12 +22,12 @@ function Encabezado() {
   return (
     <header className="site-header">
       <nav className="navbar navbar-expand-lg" data-bs-theme="dark" aria-label="Principal">
-        <div className="container">
+        <div className="container d-flex flex-wrap align-items-center gap-3">
           <NavLink className="navbar-brand" to="/">
             Innovation Hub
           </NavLink>
 
-          <div className="navbar-nav ms-auto flex-row flex-wrap gap-3">
+          <div className="navbar-nav flex-row flex-wrap gap-3">
             <NavLink to="/" end className={({ isActive }) =>
               `nav-link ${isActive ? 'active' : ''}`
             }>
@@ -51,50 +55,32 @@ function Encabezado() {
               Publicar iniciativa
             </NavLink>
 
-            {!cargando && (
-              usuario ? (
-                <>
-                  <span className="navbar-text">
-                    {usuario.fullName}
-                  </span>
-                  <NavLink to="/mis-iniciativas" className={({ isActive }) =>
-                    `nav-link ${isActive ? 'active' : ''}`
-                  }>
-                    Mis iniciativas
-                  </NavLink>
-                  <NavLink to="/mi-perfil" className={({ isActive }) =>
-                    `nav-link ${isActive ? 'active' : ''}`
-                  }
-                  >
-                    Mi perfil
-                  </NavLink>
-                  <NavLink to="/mis-solicitudes" className={({ isActive }) =>
-                    `nav-link ${isActive ? 'active' : ''}`
-                  }
-                  >
-                    Mis solicitudes
-                  </NavLink>
-                  <NavLink to="/proyectos" className={({ isActive }) =>
-                      `nav-link ${isActive ? 'active' : ''}`
-                    }
-                  >
-                    Mis proyectos
-                  </NavLink>
-
-                  <button type="button" className="btn btn-outline-light btn-sm" onClick={manejarCerrarSesion}>
-                    Cerrar sesión
-                  </button>
-                </>
-              ) : (
-                <NavLink to="/login" className={({ isActive }) =>
-                  `nav-link ${isActive ? 'active' : ''}`
-                }
-                >
-                  Iniciar sesión
-                </NavLink>
-              )
-            )}
           </div>
+
+          {!cargando && (
+            usuario ? (
+              <details className="position-relative ms-auto">
+                <summary className="btn btn-outline-light btn-sm">{usuario.fullName}</summary>
+                <div className="dropdown-menu dropdown-menu-end show" style={{ minWidth: '12rem' }}>
+                  <NavLink className="dropdown-item" to="/mis-iniciativas" onClick={cerrarMenu}>Mis iniciativas</NavLink>
+                  <NavLink className="dropdown-item" to="/mi-perfil" onClick={cerrarMenu}>Mi perfil</NavLink>
+                  <NavLink className="dropdown-item" to="/mis-solicitudes" onClick={cerrarMenu}>Mis solicitudes</NavLink>
+                  <NavLink className="dropdown-item" to="/proyectos" onClick={cerrarMenu}>Mis proyectos</NavLink>
+                  <div className="dropdown-divider" />
+                  <button type="button" className="dropdown-item" onClick={(event) => {
+                    cerrarMenu(event)
+                    manejarCerrarSesion()
+                  }}>Cerrar sesión</button>
+                </div>
+              </details>
+            ) : (
+              <NavLink to="/login" className={({ isActive }) =>
+                `nav-link ms-auto ${isActive ? 'active' : ''}`
+              }>
+                Iniciar sesión
+              </NavLink>
+            )
+          )}
         </div>
       </nav>
     </header>
