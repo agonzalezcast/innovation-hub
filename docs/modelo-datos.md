@@ -8,6 +8,8 @@ El diagrama muestra las tablas y cómo se relacionan. En las tablas siguientes, 
 
 ![Diagrama relacional de Innovation Hub](SQL_SCHEMA.png)
 
+**Aclaración:** el diagrama muestra `1` en ambos extremos de la relación entre `Initiatives` y `Projects`. En el modelo, cada proyecto pertenece a una iniciativa, pero una iniciativa puede existir sin proyecto y generar como máximo uno. La restricción `UNIQUE` sobre `Projects.InitiativeId` garantiza ese máximo.
+
 - **Usuario–competencia:** muchos a muchos mediante `UserSkills`.
 - **Usuario–iniciativa:** uno a muchos como propietario (`Initiatives.OwnerId`); muchos a muchos como integrante mediante `InitiativeMembers`, con rol y fecha.
 - **Iniciativa–competencia:** muchos a muchos mediante `InitiativeSkills`.
@@ -39,6 +41,8 @@ En el Avance 2, la aplicación guarda la información en colecciones de MongoDB.
 Cada tabla indica el tipo de sus columnas, si son obligatorias y las reglas que deben cumplir. `Sí` equivale a `NOT NULL`; las columnas que forman una llave primaria compuesta son obligatorias.
 
 Las llaves foráneas usan `ON DELETE NO ACTION`: SQL Server impide borrar un registro mientras otra tabla lo siga utilizando. Si corresponde eliminar datos relacionados, la aplicación debe hacerlo explícitamente dentro de una transacción. Los identificadores numéricos usan `INT IDENTITY(1,1)`, las fechas con hora se guardan en UTC y las posiciones comienzan en cero.
+
+Algunas reglas requieren validación en la aplicación y operaciones transaccionales: comprobar que el propietario esté activo y forme parte del equipo, respetar el cupo, exigir al menos una competencia por iniciativa y verificar que la competencia principal de una solicitud pertenezca a esa iniciativa. También se deben validar las condiciones para aceptar solicitudes y convertir una iniciativa en proyecto. Estas reglas no quedan garantizadas solo con las restricciones de las tablas.
 
 ### Users
 
@@ -177,6 +181,8 @@ Las llaves foráneas usan `ON DELETE NO ACTION`: SQL Server impide borrar un reg
 | TokenHash | CHAR(64) | Sí | | UNIQUE; SHA-256 hexadecimal |
 | UserId | INT | Sí | FK | → Users; borrado NO ACTION |
 | ExpiresAt | DATETIME2(3) | Sí | | UTC; índice para limpieza por vencimiento |
+
+SQL Server no elimina las sesiones vencidas automáticamente como lo hace el índice TTL de MongoDB. La aplicación debe rechazar las sesiones vencidas y un proceso de mantenimiento debe eliminarlas.
 
 ## Plan de migración
 
