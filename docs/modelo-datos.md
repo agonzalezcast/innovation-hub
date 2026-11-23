@@ -131,3 +131,19 @@ Los filtros de las rutas se ejecutan en el servidor. Los demás índices de bús
 ## Cambios respecto al avance 1
 
 En el avance 1 cada iniciativa guardaba el id del propietario y además una copia de su nombre, y cada miembro guardaba su nombre y su carrera. En este avance solo se guardan los ids y los datos del usuario se obtienen de `users`, para que no se desincronicen.
+
+
+# Diseño relacional para SQL Server
+
+## Diagrama
+
+Las tablas de valores repetibles conservan su posición para no perder el orden ni los duplicados permitidos por MongoDB. `PK` indica llave primaria y `FK` llave foránea.
+
+![Diagrama relacional de Innovation Hub](SQL_DIAGRAM_2.png)
+
+- **Usuario–competencia:** muchos a muchos mediante `UsuarioCompetencias`.
+- **Usuario–iniciativa:** uno a muchos como propietario (`Iniciativas.PropietarioId`); muchos a muchos como integrante mediante `MiembrosEquipo`, con rol y fecha.
+- **Iniciativa–competencia:** muchos a muchos mediante `IniciativaCompetencias`.
+- **Iniciativa–solicitud:** uno a muchos mediante `Solicitudes.IniciativaId`.
+- **Proyecto–iniciativa:** una iniciativa tiene cero o un proyecto, y cada proyecto una iniciativa: FK obligatoria y `UNIQUE` en `Proyectos.IniciativaId`.
+- **Proyecto–usuario:** muchos a muchos derivada de proyecto → iniciativa → miembros; el propietario se obtiene de `Iniciativas.PropietarioId`. No se duplica el equipo y, como en Express, el proyecto refleja el equipo actual, no una instantánea histórica.
