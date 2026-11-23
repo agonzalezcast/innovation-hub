@@ -1,149 +1,183 @@
-# Modelo de datos
+# Modelo de datos SQL Server
 
-La información del Innovation Hub se guarda en MongoDB. Este documento describe las colecciones y explica, para cada relación, si se resolvió con documentos embebidos o con referencias y por qué.
-
-En la entrega final el mismo dominio se va a modelar sobre tablas, así que en cada decisión se indica también cómo quedaría en un modelo relacional.
-
-## Convenciones
-
-- Los nombres de los campos van en inglés y en `camelCase`, igual que en el contrato de la API.
-- Los valores controlados (tipo, categoría, visibilidad, estado) se guardan en español, como aparecen en la descripción general del proyecto.
-- Las fechas de auditoría, publicación, incorporación y vencimiento se guardan como `Date`; cuando se incluyen en respuestas se devuelven en ISO 8601. Las fechas de calendario de los proyectos se guardan como texto `YYYY-MM-DD`.
-- La API nunca devuelve `_id`, `__v` ni `passwordHash`; el identificador se expone como `id` en texto.
-
-## Colecciones
-
-### `users`
-
-| Campo | Tipo | Notas |
-|---|---|---|
-| `_id` | ObjectId | |
-| `firstName`, `lastName` | String | Obligatorios |
-| `secondLastName` | String | Opcional; puede estar vacío |
-| `email` | String | Obligatorio, único (RN-01). No se modifica desde el perfil |
-| `passwordHash` | String | Hash con bcrypt. Nunca se devuelve |
-| `memberType` | String | Estudiante, Docente o Administrativo |
-| `career` | String | |
-| `description` | String | |
-| `skills` | [ObjectId] | Referencias a `skills` |
-| `interests` | [String] | |
-| `availability` | String | |
-| `portfolioUrl` | String | Opcional |
-| `active` | Boolean | Solo un usuario activo puede ser propietario (RN-03) |
-| `createdAt`, `updatedAt` | Date | |
-
-`fullName` se calcula para las respuestas a partir de los nombres y apellidos; no se guarda como un campo independiente.
-
-### `skills`
-
-| Campo | Tipo | Notas |
-|---|---|---|
-| `_id` | ObjectId | |
-| `name` | String | Único |
-
-### `initiatives`
-
-| Campo | Tipo | Notas |
-|---|---|---|
-| `_id` | ObjectId | |
-| `title`, `summary`, `description`, `problem`, `beneficiaries` | String | `problem` y `beneficiaries` pueden ser `null` |
-| `titleKey` | String | Título normalizado en minúsculas para comprobar unicidad |
-| `type` | String | Idea, Necesidad o Reto (RN-04) |
-| `category` | String | Valor controlado |
-| `skills` | [ObjectId] | Competencias requeridas, referencias a `skills` |
-| `capacity` | Number | Capacidad total, incluido el propietario |
-| `visibility` | String | Pública, Institucional, Restringida o Privada (RN-05) |
-| `status` | String | Borrador, Publicada, En formación de equipo, Convertida en proyecto o Archivada |
-| `ownerId` | ObjectId | Referencia a `users`, exactamente uno (RN-02) |
-| `members` | [Miembro] | Embebido, ver abajo |
-| `tags` | [String] | |
-| `publishedAt`, `createdAt`, `updatedAt` | Date | |
-
-Miembro embebido:
-
-| Campo | Tipo | Notas |
-|---|---|---|
-| `userId` | ObjectId | Referencia a `users` |
-| `role` | String | |
-| `joinedAt` | Date | |
-
-### `requests`
-
-| Campo | Tipo | Notas |
-|---|---|---|
-| `_id` | ObjectId | |
-| `initiativeId` | ObjectId | Referencia a `initiatives` |
-| `requesterId` | ObjectId | Referencia a `users` |
-| `message` | String | |
-| `mainSkillId` | ObjectId | Referencia a `skills` |
-| `role` | String | Rol propuesto |
-| `availability` | String | |
-| `status` | String | Pendiente, Aceptada, Rechazada o Cancelada |
-| `createdAt`, `updatedAt`, `resolvedAt` | Date | |
-
-### `projects`
-
-| Campo | Tipo | Notas |
-|---|---|---|
-| `_id` | ObjectId | |
-| `initiativeId` | ObjectId | Referencia a la iniciativa de origen, única (RN-18) |
-| `name`, `description`, `objective` | String | |
-| `technologies` | [String] | Tecnologías del proyecto |
-| `startDate` | String | Fecha de inicio en formato `YYYY-MM-DD` |
-| `estimatedEndDate` | String | Fecha estimada en formato `YYYY-MM-DD` o `null` |
-| `status` | String | |
-| `repositoryUrl` | String | Opcional, `https://github.com/{owner}/{repo}` |
-| `createdAt`, `updatedAt` | Date | |
-
-### `sessions`
-
-| Campo | Tipo | Notas |
-|---|---|---|
-| `_id` | ObjectId | |
-| `tokenHash` | String | Hash SHA-256 único del token; no se guarda el token original |
-| `userId` | ObjectId | Referencia a `users` |
-| `expiresAt` | Date | Índice TTL: Mongo borra la sesión al vencer |
-
-## Relaciones y justificación
-
-| Relación | Decisión | Por qué | En tablas |
-|---|---|---|---|
-| Usuario ↔ competencias (N:M) | Referencia (`users.skills`) | El catálogo de competencias es compartido, se filtra por él y un nombre se corrige en un solo lugar | Tabla intermedia `usuario_competencia` |
-| Iniciativa ↔ competencias requeridas (N:M) | Referencia (`initiatives.skills`) | Igual que en usuarios; permite buscar iniciativas por competencia con un índice | Tabla intermedia `iniciativa_competencia` |
-| Iniciativa → propietario (N:1) | Referencia (`ownerId`) | El usuario existe por sí solo y sus datos cambian; copiarlos en cada iniciativa los desincroniza | Llave foránea `id_propietario` |
-| Iniciativa → miembros del equipo (1:N acotado) | Embebido (`members`) | La lista está limitada por el cupo, siempre se lee junto con la iniciativa y la incorporación se puede hacer en una sola operación atómica, lo que ayuda a cumplir RN-15. Solo se guarda el `userId`, no copias del nombre ni de la carrera | Tabla `miembro_equipo` con llave compuesta (`id_iniciativa`, `id_usuario`) |
-| Solicitud → iniciativa y solicitante | Referencia (colección propia) | Las solicitudes crecen sin límite, se consultan desde los dos lados (mis solicitudes y solicitudes recibidas) y se paginan y filtran por estado | Tabla `solicitud` con dos llaves foráneas |
-| Proyecto → iniciativa de origen (1:1) | Referencia (`initiativeId`, único) | La iniciativa se conserva para mantener el vínculo con el problema original (RN-19) y solo puede generar un proyecto (RN-18) | Llave foránea única `id_iniciativa` |
-| Sesión → usuario | Referencia | El servidor consulta la sesión mediante el hash del token; al cerrar sesión se borra el documento | Tabla `sesion` |
-
-## Índices
-
-El servidor prepara estos índices al conectarse:
-
-- `users.email` único.
-- `initiatives.titleKey` único para títulos normalizados. El índice creado por el servidor es parcial para documentos que contienen el campo; también se acepta un índice único completo compatible que ya exista.
-- `requests`: índice único parcial sobre `{ initiativeId, requesterId, status }` para solicitudes en estado `Pendiente`.
-- `projects.initiativeId` único.
-- `sessions.tokenHash` único y TTL sobre `expiresAt`.
-
-Los filtros de las rutas se ejecutan en el servidor. Los demás índices de búsqueda pueden evaluarse según el volumen de datos y no se crean automáticamente en la implementación actual.
-
-## Cambios respecto al avance 1
-
-En el avance 1 cada iniciativa guardaba el id del propietario y además una copia de su nombre, y cada miembro guardaba su nombre y su carrera. En este avance solo se guardan los ids y los datos del usuario se obtienen de `users`, para que no se desincronicen.
-
-
-# Diseño relacional para SQL Server
+Este documento describe las tablas y relaciones propuestas para la base de datos del Innovation Hub en SQL Server. El diseño parte de los datos que actualmente guarda la aplicación en MongoDB.
 
 ## Diagrama
 
-Las tablas de valores repetibles conservan su posición para no perder el orden ni los duplicados permitidos por MongoDB. `PK` indica llave primaria y `FK` llave foránea.
+El diagrama muestra las tablas y cómo se relacionan. En las tablas siguientes, `PK` identifica la llave primaria y `FK` la llave foránea. Las tablas que guardan listas incluyen una posición para conservar el orden original de sus elementos.
 
-![Diagrama relacional de Innovation Hub](SQL_DIAGRAM_2.png)
+![Diagrama relacional de Innovation Hub](SQL_SCHEMA.png)
 
-- **Usuario–competencia:** muchos a muchos mediante `UsuarioCompetencias`.
-- **Usuario–iniciativa:** uno a muchos como propietario (`Iniciativas.PropietarioId`); muchos a muchos como integrante mediante `MiembrosEquipo`, con rol y fecha.
-- **Iniciativa–competencia:** muchos a muchos mediante `IniciativaCompetencias`.
-- **Iniciativa–solicitud:** uno a muchos mediante `Solicitudes.IniciativaId`.
-- **Proyecto–iniciativa:** una iniciativa tiene cero o un proyecto, y cada proyecto una iniciativa: FK obligatoria y `UNIQUE` en `Proyectos.IniciativaId`.
-- **Proyecto–usuario:** muchos a muchos derivada de proyecto → iniciativa → miembros; el propietario se obtiene de `Iniciativas.PropietarioId`. No se duplica el equipo y, como en Express, el proyecto refleja el equipo actual, no una instantánea histórica.
+- **Usuario–competencia:** muchos a muchos mediante `UserSkills`.
+- **Usuario–iniciativa:** uno a muchos como propietario (`Initiatives.OwnerId`); muchos a muchos como integrante mediante `InitiativeMembers`, con rol y fecha.
+- **Iniciativa–competencia:** muchos a muchos mediante `InitiativeSkills`.
+- **Iniciativa–solicitud:** uno a muchos mediante `Requests.InitiativeId`.
+- **Proyecto–iniciativa:** una iniciativa tiene cero o un proyecto, y cada proyecto una iniciativa: FK obligatoria y `UNIQUE` en `Projects.InitiativeId`.
+- **Proyecto–usuario:** muchos a muchos derivada de proyecto → iniciativa → miembros; el propietario se obtiene de `Initiatives.OwnerId`. No se duplica el equipo y, como en Express, el proyecto refleja el equipo actual, no una instantánea histórica.
+
+### Del documento a la tabla
+
+En el Avance 2, la aplicación guarda la información en colecciones de MongoDB. La siguiente tabla muestra dónde quedará cada colección y cada arreglo en el modelo relacional, y explica por qué se hizo cada cambio.
+
+| Origen MongoDB | Destino SQL Server | Motivo |
+|---|---|---|
+| `users` y sus campos escalares | `Users` | Una fila por usuario; `_id` se traduce a `Id`. |
+| `users.skills[]` | `UserSkills` | Referencias compartidas; relación N:M. |
+| `users.interests[]` | `UserInterests` | Valores multivaluados con posición; conserva duplicados y orden. |
+| `skills` | `Skills` | Catálogo compartido con nombre único. |
+| `initiatives` y `ownerId` | `Initiatives`, `OwnerId` → `Users` | Una fila por iniciativa y propietario existente. |
+| `initiatives.skills[]` | `InitiativeSkills` | Referencias compartidas N:M. |
+| `initiatives.members[]` y `members.userId` | `InitiativeMembers`, `UserId` → `Users` | Se conservan usuario, rol y fecha de incorporación. |
+| `initiatives.tags[]` | `InitiativeTags` | Valores multivaluados con posición. |
+| `requests`, `initiativeId`, `requesterId`, `mainSkillId` | `Requests` y tres FK a `Initiatives`, `Users`, `Skills` | Conserva solicitudes y referencias independientes. |
+| `projects`, `initiativeId` | `Projects` y FK única a `Initiatives` | Una iniciativa origina como máximo un proyecto. |
+| `projects.technologies[]` | `ProjectTechnologies` | Conserva orden y duplicados admitidos por Express. |
+| `sessions`, `userId` | `Sessions` y FK a `Users` | Conserva hash y vencimiento; no el token original. |
+
+## Tablas
+
+Cada tabla indica el tipo de sus columnas, si son obligatorias y las reglas que deben cumplir. `Sí` equivale a `NOT NULL`; las columnas que forman una llave primaria compuesta son obligatorias.
+
+Las llaves foráneas usan `ON DELETE NO ACTION`: SQL Server impide borrar un registro mientras otra tabla lo siga utilizando. Si corresponde eliminar datos relacionados, la aplicación debe hacerlo explícitamente dentro de una transacción. Los identificadores numéricos usan `INT IDENTITY(1,1)`, las fechas con hora se guardan en UTC y las posiciones comienzan en cero.
+
+### Users
+
+| Columna | Tipo | ¿Obligatoria? | Llave | Regla |
+|---|---|---|---|---|
+| Id | INT IDENTITY | Sí | PK | |
+| FirstName | NVARCHAR(80) | Sí | | Nombre |
+| LastName | NVARCHAR(80) | Sí | | Primer apellido |
+| SecondLastName | NVARCHAR(80) | Sí | | Puede ser cadena vacía |
+| Email | NVARCHAR(254) | Sí | | UNIQUE; normalizado por la aplicación |
+| PasswordHash | NVARCHAR(255) | Sí | | Hash bcrypt; nunca se devuelve |
+| MemberType | NVARCHAR(20) | Sí | | CHECK IN (N'Estudiante', N'Docente', N'Administrativo') |
+| Career | NVARCHAR(120) | Sí | | |
+| Description | NVARCHAR(1000) | Sí | | Puede ser cadena vacía |
+| Availability | NVARCHAR(100) | Sí | | Puede ser cadena vacía |
+| PortfolioUrl | NVARCHAR(500) | No | | NULL cuando no hay dirección |
+| Active | BIT | Sí | | 0 o 1 |
+| CreatedAt | DATETIME2(3) | Sí | | UTC |
+| UpdatedAt | DATETIME2(3) | Sí | | UTC |
+
+### Skills
+
+| Columna | Tipo | ¿Obligatoria? | Llave | Regla |
+|---|---|---|---|---|
+| Id | INT IDENTITY | Sí | PK | |
+| Name | NVARCHAR(120) | Sí | | UNIQUE |
+
+### UserSkills
+
+| Columna | Tipo | ¿Obligatoria? | Llave | Regla |
+|---|---|---|---|---|
+| UserId | INT | Sí | PK, FK | → Users; borrado NO ACTION |
+| SkillId | INT | Sí | PK, FK | → Skills; borrado NO ACTION |
+
+### UserInterests
+
+| Columna | Tipo | ¿Obligatoria? | Llave | Regla |
+|---|---|---|---|---|
+| UserId | INT | Sí | PK, FK | → Users; borrado NO ACTION |
+| Position | INT | Sí | PK | CHECK (Position >= 0) |
+| Value | NVARCHAR(100) | Sí | | |
+
+### Initiatives
+
+| Columna | Tipo | ¿Obligatoria? | Llave | Regla |
+|---|---|---|---|---|
+| Id | INT IDENTITY | Sí | PK | |
+| Title | NVARCHAR(80) | Sí | | |
+| TitleKey | NVARCHAR(80) | Sí | | UNIQUE; título normalizado por la aplicación |
+| Type | NVARCHAR(20) | Sí | | CHECK IN (N'Idea', N'Necesidad', N'Reto') |
+| Summary | NVARCHAR(200) | Sí | | |
+| Description | NVARCHAR(1000) | Sí | | |
+| Problem | NVARCHAR(500) | No | | |
+| Beneficiaries | NVARCHAR(150) | No | | |
+| Category | NVARCHAR(40) | Sí | | CHECK IN (N'Tecnología', N'Educación', N'Sostenibilidad', N'Impacto social', N'Negocios y emprendimiento', N'Salud y bienestar', N'Cultura y creatividad', N'Otro') |
+| Capacity | INT | Sí | | CHECK (Capacity BETWEEN 1 AND 20); incluye propietario |
+| Visibility | NVARCHAR(20) | Sí | | CHECK IN (N'Pública', N'Institucional', N'Restringida', N'Privada') |
+| Status | NVARCHAR(30) | Sí | | CHECK IN (N'Borrador', N'Publicada', N'En formación de equipo', N'Convertida en proyecto', N'Archivada') |
+| OwnerId | INT | Sí | FK | → Users; borrado NO ACTION |
+| PublishedAt | DATETIME2(3) | No | | UTC |
+| CreatedAt | DATETIME2(3) | Sí | | UTC |
+| UpdatedAt | DATETIME2(3) | Sí | | UTC |
+
+### InitiativeSkills
+
+| Columna | Tipo | ¿Obligatoria? | Llave | Regla |
+|---|---|---|---|---|
+| InitiativeId | INT | Sí | PK, FK | → Initiatives; borrado NO ACTION |
+| SkillId | INT | Sí | PK, FK | → Skills; borrado NO ACTION |
+
+### InitiativeMembers
+
+| Columna | Tipo | ¿Obligatoria? | Llave | Regla |
+|---|---|---|---|---|
+| InitiativeId | INT | Sí | PK, FK | → Initiatives; borrado NO ACTION |
+| UserId | INT | Sí | PK, FK | → Users; borrado NO ACTION |
+| Role | NVARCHAR(60) | Sí | | Incluye `Propietario` |
+| JoinedAt | DATETIME2(3) | Sí | | UTC |
+| Position | INT | Sí | | CHECK >= 0; UNIQUE (InitiativeId, Position), conserva orden de members |
+
+### InitiativeTags
+
+| Columna | Tipo | ¿Obligatoria? | Llave | Regla |
+|---|---|---|---|---|
+| InitiativeId | INT | Sí | PK, FK | → Initiatives; borrado NO ACTION |
+| Position | INT | Sí | PK | CHECK (Position >= 0) |
+| Value | NVARCHAR(20) | Sí | | UNIQUE (InitiativeId, Value), con comparación sin distinción de mayúsculas |
+
+### Requests
+
+| Columna | Tipo | ¿Obligatoria? | Llave | Regla |
+|---|---|---|---|---|
+| Id | INT IDENTITY | Sí | PK | |
+| InitiativeId | INT | Sí | FK | → Initiatives; borrado NO ACTION |
+| RequesterId | INT | Sí | FK | → Users; borrado NO ACTION |
+| MainSkillId | INT | Sí | FK | → Skills; borrado NO ACTION |
+| Message | NVARCHAR(500) | Sí | | |
+| Role | NVARCHAR(60) | Sí | | |
+| Availability | NVARCHAR(60) | Sí | | |
+| Status | NVARCHAR(20) | Sí | | CHECK IN (N'Pendiente', N'Aceptada', N'Rechazada', N'Cancelada') |
+| CreatedAt | DATETIME2(3) | Sí | | UTC |
+| UpdatedAt | DATETIME2(3) | Sí | | UTC |
+| ResolvedAt | DATETIME2(3) | No | | UTC; cancelación puede dejar NULL |
+
+Índice único filtrado: `CREATE UNIQUE INDEX UX_Requests_Pending ON Requests(InitiativeId, RequesterId) WHERE Status = N'Pendiente';`. Permite solicitudes históricas, pero una sola pendiente por persona e iniciativa.
+
+### Projects
+
+| Columna | Tipo | ¿Obligatoria? | Llave | Regla |
+|---|---|---|---|---|
+| Id | INT IDENTITY | Sí | PK | |
+| InitiativeId | INT | Sí | FK | → Initiatives; UNIQUE; borrado NO ACTION |
+| Name | NVARCHAR(120) | Sí | | |
+| Description | NVARCHAR(2000) | Sí | | |
+| Objective | NVARCHAR(1000) | Sí | | |
+| StartDate | DATE | Sí | | La API lo muestra como `YYYY-MM-DD` |
+| EstimatedEndDate | DATE | No | | La API lo muestra como `YYYY-MM-DD` |
+| Status | NVARCHAR(40) | Sí | | Estado del proyecto |
+| RepositoryUrl | NVARCHAR(500) | No | | URL de GitHub validada por aplicación |
+| CreatedAt | DATETIME2(3) | Sí | | UTC |
+| UpdatedAt | DATETIME2(3) | Sí | | UTC |
+
+### ProjectTechnologies
+
+| Columna | Tipo | ¿Obligatoria? | Llave | Regla |
+|---|---|---|---|---|
+| ProjectId | INT | Sí | PK, FK | → Projects; borrado NO ACTION |
+| Position | INT | Sí | PK | CHECK (Position >= 0) |
+| Value | NVARCHAR(60) | Sí | | |
+
+### Sessions
+
+| Columna | Tipo | ¿Obligatoria? | Llave | Regla |
+|---|---|---|---|---|
+| Id | INT IDENTITY | Sí | PK | |
+| TokenHash | CHAR(64) | Sí | | UNIQUE; SHA-256 hexadecimal |
+| UserId | INT | Sí | FK | → Users; borrado NO ACTION |
+| ExpiresAt | DATETIME2(3) | Sí | | UTC; índice para limpieza por vencimiento |
+
+## Plan de migración
+
+Consulte el [plan de migración y los datos de prueba](plan-migracion.md).
