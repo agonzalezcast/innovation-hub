@@ -1,10 +1,10 @@
 # Innovation Hub
 
-Proyecto de SOFT-12, Programación Web Avanzada. Innovation Hub es una aplicación para publicar iniciativas, encontrar personas con competencias complementarias, gestionar solicitudes de participación y organizar equipos y proyectos.
+Proyecto de SOFT-12, Programación Web Avanzada. 
 
 ## Integrantes
 
-- Alexander González Castillo
+- Alexander González Castillo (PARTE B)
 - Carlos I. Morales Rojas
 
 **Sección:** SCV2
