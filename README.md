@@ -21,6 +21,14 @@ Proyecto de SOFT-12, Programación Web Avanzada. Innovation Hub es una aplicaci�
 - `docs/`: contrato de la API, especificación OpenAPI y modelo de datos.
 - `pruebas/`: colección de solicitudes para Postman.
 
+## Diseño relacional — Tarea 3
+
+- [Modelo relacional](docs/modelo-datos.md)
+- [Plan de migración y datos de prueba](docs/plan-migracion.md)
+- [Consultas SQL propuestas](docs/consultas.sql)
+- [Diseño de rutas de lectura](docs/rutas.md)
+- [Investigación sobre EF Core](docs/investigacion-efcore.md)
+
 ## Requisitos
 
 - Node.js y npm.
