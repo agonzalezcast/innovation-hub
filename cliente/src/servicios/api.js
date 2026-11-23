@@ -28,6 +28,10 @@ export async function peticion(ruta, opciones = {}) {
   const datos = await respuesta.json().catch(() => null)
 
   if (!respuesta.ok) {
+    if (respuesta.status === 401 && ruta === '/auth/login') {
+      throw new Error('Correo electrónico o contraseña incorrectos.')
+    }
+
     const mensajes = {
       400: 'Los datos enviados no son válidos. Revise la información.',
       401: 'Debe iniciar sesión para realizar esta acción.',

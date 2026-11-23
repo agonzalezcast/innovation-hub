@@ -1,4 +1,6 @@
+import { readFileSync } from 'node:fs';
 import express from 'express';
+import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
 import env from './config/env.js';
 import skills from './routes/skills.js';
@@ -10,6 +12,7 @@ import projects from './routes/projects.js';
 import { manejarError, rutaNoEncontrada } from './middlewares/errores.js';
 
 const app = express();
+const openapi = JSON.parse(readFileSync(new URL('../../docs/openapi.json', import.meta.url), 'utf8'));
 
 app.use(cors({
   origin: env.clientOrigin,
@@ -17,6 +20,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json({ limit: '100kb' }));
+
+app.get('/api/openapi.json', (req, res) => res.json(openapi));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openapi));
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
